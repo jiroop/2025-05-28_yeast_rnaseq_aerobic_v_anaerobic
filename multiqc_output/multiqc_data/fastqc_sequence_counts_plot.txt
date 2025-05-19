@@ -1,0 +1,9 @@
+Sample	Unique Reads	Duplicate Reads
+fastqc_output | aerobic_r1_1	2470882.0	4850776.0
+fastqc_output | aerobic_r1_2	2582540.0	4739118.0
+fastqc_output | aerobic_r2_1	2528235.0	4793424.0
+fastqc_output | aerobic_r2_2	2595600.0	4726059.0
+fastqc_output | anaerobic_r1_1	1990812.0	4101474.0
+fastqc_output | anaerobic_r1_2	2309053.0	3783233.0
+fastqc_output | anaerobic_r2_1	2041336.0	4050951.0
+fastqc_output | anaerobic_r2_2	2329271.0	3763016.0

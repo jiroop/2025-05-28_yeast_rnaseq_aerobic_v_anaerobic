@@ -1,0 +1,6 @@
+
+
+*.fastq.gz
+*fq.gz
+*fastqc.zip
+*.fna.gz
