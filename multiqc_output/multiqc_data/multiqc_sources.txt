@@ -1,9 +1,0 @@
-Module	Section	Sample Name	Source
-FastQC	all_sections	fastqc_output | anaerobic_r1_1	/Users/jeremy/Desktop/250518_yeast_anaerobic_v_aerobic_expression/fastqc_output/anaerobic_r1_1_fastqc.zip
-FastQC	all_sections	fastqc_output | aerobic_r2_1	/Users/jeremy/Desktop/250518_yeast_anaerobic_v_aerobic_expression/fastqc_output/aerobic_r2_1_fastqc.zip
-FastQC	all_sections	fastqc_output | anaerobic_r2_2	/Users/jeremy/Desktop/250518_yeast_anaerobic_v_aerobic_expression/fastqc_output/anaerobic_r2_2_fastqc.zip
-FastQC	all_sections	fastqc_output | aerobic_r1_2	/Users/jeremy/Desktop/250518_yeast_anaerobic_v_aerobic_expression/fastqc_output/aerobic_r1_2_fastqc.zip
-FastQC	all_sections	fastqc_output | anaerobic_r2_1	/Users/jeremy/Desktop/250518_yeast_anaerobic_v_aerobic_expression/fastqc_output/anaerobic_r2_1_fastqc.zip
-FastQC	all_sections	fastqc_output | aerobic_r1_1	/Users/jeremy/Desktop/250518_yeast_anaerobic_v_aerobic_expression/fastqc_output/aerobic_r1_1_fastqc.zip
-FastQC	all_sections	fastqc_output | anaerobic_r1_2	/Users/jeremy/Desktop/250518_yeast_anaerobic_v_aerobic_expression/fastqc_output/anaerobic_r1_2_fastqc.zip
-FastQC	all_sections	fastqc_output | aerobic_r2_2	/Users/jeremy/Desktop/250518_yeast_anaerobic_v_aerobic_expression/fastqc_output/aerobic_r2_2_fastqc.zip

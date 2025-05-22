@@ -1,0 +1,6 @@
+[2025-05-21 19:54:54,078] multiqc.core.update_config                         [INFO   ]  Report title: Salmon Mapping QC
+[2025-05-21 19:54:54,078] multiqc.core.update_config                         [INFO   ]  Prepending directory to sample names
+[2025-05-21 19:54:54,612] multiqc.core.file_search                           [INFO   ]  Search path: /Users/jeremy/Desktop/250518_yeast_anaerobic_v_aerobic_expression/results/salmon_mapping
+[2025-05-21 19:54:54,666] multiqc.modules.salmon.salmon                      [INFO   ]  Found 4 meta reports
+[2025-05-21 19:54:54,666] multiqc.modules.salmon.salmon                      [INFO   ]  Found 4 fragment length distributions
+[2025-05-21 19:54:54,666] multiqc.modules.salmon.salmon                      [INFO   ]  Found 4 library format counts reports

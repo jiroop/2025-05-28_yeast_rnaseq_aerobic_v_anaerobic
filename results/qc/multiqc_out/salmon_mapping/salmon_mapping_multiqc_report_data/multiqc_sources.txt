@@ -1,0 +1,5 @@
+Module	Section	Sample Name	Source
+Salmon	all_sections	results | salmon_mapping | anaerobic_r2 | libParams | anaerobic_r2	/Users/jeremy/Desktop/250518_yeast_anaerobic_v_aerobic_expression/results/salmon_mapping/anaerobic_r2/libParams/flenDist.txt
+Salmon	all_sections	results | salmon_mapping | aerobic_r2 | libParams | aerobic_r2	/Users/jeremy/Desktop/250518_yeast_anaerobic_v_aerobic_expression/results/salmon_mapping/aerobic_r2/libParams/flenDist.txt
+Salmon	all_sections	results | salmon_mapping | aerobic_r1 | libParams | aerobic_r1	/Users/jeremy/Desktop/250518_yeast_anaerobic_v_aerobic_expression/results/salmon_mapping/aerobic_r1/libParams/flenDist.txt
+Salmon	all_sections	results | salmon_mapping | anaerobic_r1 | libParams | anaerobic_r1	/Users/jeremy/Desktop/250518_yeast_anaerobic_v_aerobic_expression/results/salmon_mapping/anaerobic_r1/libParams/flenDist.txt

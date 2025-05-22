@@ -1,0 +1,22 @@
+{
+    "index_version": 4,
+    "reference_gfa": [
+        "./data/reference/salmon_transcriptome_index"
+    ],
+    "sampling_type": "dense",
+    "k": 31,
+    "num_kmers": 8200305,
+    "num_contigs": 11116,
+    "seq_length": 8533785,
+    "have_ref_seq": true,
+    "have_edge_vec": false,
+    "SeqHash": "ce1b1b0f78b9b788c120f9ed6e18d445baa4c05929ae22721b628256beedd05e",
+    "NameHash": "c3699cf4479c789221669a417c30083a896be545170f4711d6d2ebad1fb50ef3",
+    "SeqHash512": "e24126a4b9b0b05c40c9c1b899fad727cec16afeca242663702085dff3711f3ac3b60b7a9e4f602cd433a1edab362bda20f2103888765424729e17156668700f",
+    "NameHash512": "7ec1886e81d1d2019e6c08e84bcb3d7aa99918beb7eabb66bc434defbc73ccd6ae63fac411848d233c7cb89762ef7ae0e1baee07275377a1cb5a5c10e6d57b72",
+    "DecoySeqHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "DecoyNameHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "num_decoys": 0,
+    "first_decoy_index": 18446744073709551615,
+    "keep_duplicates": false
+}

@@ -1,0 +1,22 @@
+{
+    "read_files": "[ data/fastq_raw/anaerobic_r2_1.fq.gz, data/fastq_raw/anaerobic_r2_2.fq.gz]",
+    "expected_format": "ISR",
+    "compatible_fragment_ratio": 1.0,
+    "num_compatible_fragments": 5124034,
+    "num_assigned_fragments": 5124034,
+    "num_frags_with_concordant_consistent_mappings": 4357182,
+    "num_frags_with_inconsistent_or_orphan_mappings": 779548,
+    "strand_mapping_bias": 0.00025285181048320855,
+    "MSF": 0,
+    "OSF": 0,
+    "ISF": 1102,
+    "MSR": 0,
+    "OSR": 0,
+    "ISR": 4357182,
+    "SF": 286471,
+    "SR": 491975,
+    "MU": 0,
+    "OU": 0,
+    "IU": 0,
+    "U": 0
+}

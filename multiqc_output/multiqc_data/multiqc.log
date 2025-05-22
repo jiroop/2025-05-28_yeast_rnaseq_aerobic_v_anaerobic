@@ -1,3 +1,0 @@
-[2025-05-18 21:41:43,535] multiqc.core.update_config                         [INFO   ]  Prepending directory to sample names
-[2025-05-18 21:41:44,079] multiqc.core.file_search                           [INFO   ]  Search path: /Users/jeremy/Desktop/250518_yeast_anaerobic_v_aerobic_expression/fastqc_output
-[2025-05-18 21:41:44,239] multiqc.modules.fastqc.fastqc                      [INFO   ]  Found 8 reports
