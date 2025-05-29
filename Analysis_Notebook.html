@@ -1,0 +1,1534 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.31">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Analysis Notebook</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Analysis_Notebook_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Analysis_Notebook_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="Analysis_Notebook_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="Analysis_Notebook_files/libs/quarto-html/popper.min.js"></script>
+<script src="Analysis_Notebook_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Analysis_Notebook_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Analysis_Notebook_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Analysis_Notebook_files/libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Analysis_Notebook_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Analysis_Notebook_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Analysis_Notebook_files/libs/bootstrap/bootstrap-b209fdb71606fdca1c57bf24328d8c82.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="Analysis_Notebook_files/libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="Analysis_Notebook_files/libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Analysis Notebook</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>This notebook is part of an RNA-seq analysis project that has two goals:</p>
+<ol type="1">
+<li>To assess high level differences in gene expression between <em>S. cerevisiae</em> grown in aerobic and anaerobic conditions.</li>
+<li>To identify genes that display very low or negligible expression under aerobic conditions and moderate to high expression under anaerobic conditions. The promoters of these genes will be useful bioengineering tools as they will enable conditional specific gene expression in fermentation conditions – a useful trait in multiple bio-manufacturing processes.</li>
+</ol>
+<p>As mentioned above, this notebook represents only a part of the analysis performed in this project. The first half of the analysis (read quality control and pseudo alignment) is performed by command line tools that are called by the bash script, RNASeqpipeline.sh, that is located in the scripts directory. Part 1 of this document provides a brief summary of this phase, but does not detail the specific commands. The second half of the analysis project is coded in R, and is contained within this document. Thus, Parts 2 through 5 of this document describe the analysis of assigned RNA-seq reads. The goal of this stage of analysis is to address the two specific goals mentioned above. Note that the R_analysis_notebook.qmd version of this document contained in the scripts directory is called by RNASeqpipeline.sh. Thus, by running RNASeqpipeline.sh all steps in the analysis of these reads is executed, including running of the R code described here, and generation of the R_analysis_notebook.html file.</p>
+<p>A note about the RNA-seq reads used as data in this analysis. These reads were downloaded from <a href="https://figshare.com/articles/dataset/Yeast_RNA-seq_data_and_transcriptome_for_kallisto-sleuth_demo_session/24182520">this figshare project</a>. Unfortunately, the details of the experiment that produced these data are unknown: Neither the strain nor the growth conditions (aside from anaerobic or aerobic) are described. As such, the conclusions drawn from this analysis should be treated as preliminary.</p>
+</section>
+<section id="part-1-read-quality-control-and-mapping" class="level2">
+<h2 class="anchored" data-anchor-id="part-1-read-quality-control-and-mapping">Part 1 — Read quality control and mapping</h2>
+<p>The first steps of the analysis utilized command-line tools that were executed via a bash script associated with the project: RNASeqpipeline.sh. Details of these steps can be seen by looking at the script. The workflow performed by command-line tools is summarized below:</p>
+<ul>
+<li>Downloading reads in fastq format from the <a href="https://figshare.com/articles/dataset/Yeast_RNA-seq_data_and_transcriptome_for_kallisto-sleuth_demo_session/24182520">figshare project</a></li>
+<li>Assessing read quality with fastqc and multiqc</li>
+<li>Assignment of reads to the <em>S. cerevisiae</em> s288c R64 reference transcriptome using Salmon</li>
+</ul>
+<p>The plots below give a sense for the quality of the reads and the assignment performed by Salmon.</p>
+<p><br> <img src="./qc/multiqc_out/fastqc/general_stats_table.png" class="img-fluid quarto-figure quarto-figure-center" style="width:100.0%" alt="Figure 1. MultiQC report on basic fastq read statistics"></p>
+<p>In Figure 1 we see that the fastq data includes 4 set of paired end reads, corresponding to the two biological replicates assayed in both aerobic and anaerobic conditions. Between 6.1e6 and 7.3e6 reads are present in each file. 61% - 67% of the reads are duplicates, which seems high but is fairly normal from what I’ve observed for RNA-seq in yeast where transcripts tend to be relatively short and some genes are expressed at very high levels.</p>
+<p>Next, we assess per base sequence quality for a representative fastq file.</p>
+<p><br> <img src="./qc/fastqc_out/aerobic_r1_1_fastqc_base_quality.png" class="img-fluid quarto-figure quarto-figure-'center'" style="width:80.0%" alt="“Figure 2. FastQC per-base quality summary for aerobic_r1_1"></p>
+<p>Figure 2 shows that the per base read quality is sufficiently high across the length of read, and so no trimming was performed. Additionally, &lt;2% adapter sequences were identified in any of the fastq files (not shown), and so no removal of adapter sequences was necessary prior to mapping.</p>
+<p>After read mapping, the quality of the mappings was assessed using MultiQC. These data show that 82% - 84% of the reads mapped to the reference genome.</p>
+</section>
+<section id="part-2-import-mapped-reads-into-r-using-tximport" class="level2">
+<h2 class="anchored" data-anchor-id="part-2-import-mapped-reads-into-r-using-tximport">Part 2 — Import mapped reads into R using Tximport</h2>
+<p><br><strong>Load necessary libraries</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GGally)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tximport)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DESeq2)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(clusterProfiler)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(org.Sc.sgd.db)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggridges)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cowplot)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggbreak)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggExtra)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><br><strong>Import and display the study design table</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>study_design <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">'./data/study_design.csv'</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">kbl</span>(study_design) <span class="sc">%&gt;%</span> <span class="fu">kable_styling</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table caption-top table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Sample_name</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Condition</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Rep</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">aerobic_r1</td>
+<td style="text-align: left;">aerobic</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">aerobic_r2</td>
+<td style="text-align: left;">aerobic</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">anaerobic_r1</td>
+<td style="text-align: left;">anaerobic</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">anaerobic_r2</td>
+<td style="text-align: left;">anaerobic</td>
+<td style="text-align: right;">2</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><br><strong>Prepare to import mapped reads with tximport</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a vector containing the paths to the mapped reads</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>mapped_reads_files <span class="ot">&lt;-</span> </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">file.path</span>(<span class="st">"./mapped_reads_salmon/"</span>, study_design<span class="sc">$</span>Sample_name, <span class="st">"quant.sf"</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># check that the mapped files exist</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">all</span>(<span class="fu">file.exists</span>(mapped_reads_files))) </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  {<span class="fu">stop</span>(<span class="st">"Some Salmon quant.sf files are missing"</span>)}</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the transcript-to-gene-mapping file into the tx2gene table</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>tx2gene <span class="ot">&lt;-</span> </span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_tsv</span>(<span class="st">"./data/reference/Saccharomyces_cerevisiae_R64-1-1_tx_to_gene_mapping.tsv"</span>,</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">col_names =</span> <span class="fu">c</span>(<span class="st">"gene_id"</span>, <span class="st">"transcript_id"</span>, <span class="st">"common_name"</span>, <span class="st">"description"</span>))</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co"># fill empty common_name values with systematic names</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>tx2gene<span class="sc">$</span>common_name <span class="ot">&lt;-</span> </span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ifelse</span>(<span class="fu">is.na</span>(tx2gene<span class="sc">$</span>common_name), </span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  tx2gene<span class="sc">$</span>gene_id,</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  tx2gene<span class="sc">$</span>common_name)</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="co"># reorder columns to be compatible with tximport</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>tx2gene <span class="ot">&lt;-</span>tx2gene <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(transcript_id, gene_id, common_name, description)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><br><strong>Import reads to txi using Tximport</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># import read mapping data to txi</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>txi <span class="ot">&lt;-</span> <span class="fu">tximport</span>(mapped_reads_files, </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">type=</span><span class="st">"salmon"</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">tx2gene=</span>tx2gene,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">ignoreTxVersion=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><br><strong>Print import stats</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"tximport imported %d genes across %d samples"</span>, </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>            <span class="fu">nrow</span>(txi<span class="sc">$</span>counts), <span class="fu">ncol</span>(txi<span class="sc">$</span>counts)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tximport imported 6560 genes across 4 samples</code></pre>
+</div>
+</div>
+<p><br><strong>Plot basic read mapping data</strong></p>
+<p>To check the quality and correct assignment of replicate samples we will make scatter plots and calculate correlation coefficients among TPMs for each sample pair. I prefer non log-transformed scatterplots at this stage so that differences in highly expressed genes are not minimized by the transformation. We also plot a histogram of TPMs per gene, which in the case of yeast samples we expect to show that most genes have a low number of reads mapped whereas a few genes have many reads mapped.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the TPMs from the txi list and assign correct samples names</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>TPMs <span class="ot">&lt;-</span> txi<span class="sc">$</span>abundance</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(TPMs) <span class="ot">&lt;-</span> study_design<span class="sc">$</span>Sample_name</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># make the correlation plot and save to ./analysis_plots/</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>corr_plot <span class="ot">&lt;-</span> <span class="fu">ggpairs</span>(TPMs, </span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">upper =</span> <span class="fu">list</span>(<span class="at">continuous =</span> <span class="st">"cor"</span>), </span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">lower =</span> <span class="fu">list</span>(<span class="at">continuous =</span> <span class="fu">wrap</span>(<span class="st">"points"</span>, <span class="at">size=</span><span class="fl">0.8</span>))) <span class="sc">+</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>              <span class="fu">theme</span>(<span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">size=</span><span class="dv">13</span>)) </span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>              </span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"./analysis_plots/TPM_correlation.png"</span>, <span class="at">plot=</span>corr_plot, <span class="at">dpi=</span><span class="dv">300</span>, <span class="at">height=</span><span class="dv">8</span>, <span class="at">width=</span><span class="dv">8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><br></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./analysis_plots/TPM_correlation.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption>Figure 3. Scatter plots and gene expression distributions among samples</figcaption>
+</figure>
+</div>
+<p>These data show excellent correlation between biological replicate samples, and as expected, more modest correlation between TPMs of aerobic vs.&nbsp;anaerobic sample pairs. The distribution of TPMs per gene is also very positively-skewed, as expected.</p>
+<p>I now want to dig a bit deeper into the distribution of reads across genes in these samples. Doing this will help make me away of general trends in the data that I want to be aware of before DESeq normalization. First, I will examine histograms of sample pairs.</p>
+<p><br><strong>Prepare a data frame from TPMs for plotting</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># First, drop all genes that have less than 10 total counts across all samples</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>TPMs_filtered_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(TPMs[<span class="fu">rowSums</span>(TPMs) <span class="sc">&gt;</span> <span class="dv">10</span>, ])</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>n_genes_dropped <span class="ot">&lt;-</span> <span class="fu">nrow</span>(TPMs) <span class="sc">-</span> <span class="fu">nrow</span>(TPMs_filtered_df)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># reshape data to long format</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>TPMs_filtered_long <span class="ot">&lt;-</span> TPMs_filtered_df <span class="sc">%&gt;%</span> </span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">everything</span>(),</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">names_to=</span><span class="st">'sample'</span>,</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">values_to=</span><span class="st">'TPMs'</span>)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Print results</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">paste</span>(n_genes_dropped, </span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>          <span class="st">"genes dropped because they had less than 10 total TPMs across all samples.</span><span class="sc">\n</span><span class="st">"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1029 genes dropped because they had less than 10 total TPMs across all samples.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">paste</span>(<span class="fu">nrow</span>(TPMs_filtered_df), <span class="st">"genes remain in TPMs_filtered"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>5531 genes remain in TPMs_filtered</code></pre>
+</div>
+</div>
+<p><br><strong>Make the histogram with TPM data</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>TPMs_hist <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(TPMs_filtered_long, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">log2</span>(TPMs), <span class="at">color=</span>sample)) <span class="sc">+</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">data =</span> <span class="fu">filter</span>(TPMs_filtered_long, sample <span class="sc">==</span> <span class="st">'aerobic_r1'</span>),</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">size =</span> .<span class="dv">7</span>, <span class="at">alpha=</span>.<span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">data =</span> <span class="fu">filter</span>(TPMs_filtered_long, sample <span class="sc">==</span> <span class="st">'anaerobic_r1'</span>),</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">size =</span> .<span class="dv">7</span>, <span class="at">alpha=</span>.<span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">data =</span> <span class="fu">filter</span>(TPMs_filtered_long, sample <span class="sc">==</span> <span class="st">'anaerobic_r2'</span>),</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">size =</span> .<span class="dv">7</span>, <span class="at">alpha=</span>.<span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">data =</span> <span class="fu">filter</span>(TPMs_filtered_long, sample <span class="sc">==</span> <span class="st">'aerobic_r2'</span>),</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>               <span class="at">size =</span> .<span class="dv">7</span>, <span class="at">alpha=</span>.<span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">'log2(TPM) assigned to each gene'</span>)</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"./analysis_plots/TPMs_hist.png"</span>, <span class="at">plot=</span>TPMs_hist, <span class="at">width=</span><span class="dv">6</span>, </span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>       <span class="at">height=</span><span class="dv">4</span>, <span class="at">units=</span><span class="st">"in"</span>, <span class="at">dpi=</span><span class="dv">300</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./analysis_plots/TPMs_hist.png" class="img-fluid figure-img" style="width:85.0%"></p>
+<figcaption>Figure 4. Density plot of log2 TPMs assigned to each gene.</figcaption>
+</figure>
+</div>
+<p><br>Interesting. It looks like in the anaerobic samples most reads have fewer TPMs, but there are a small group of genes that are very highly expressed that actually have more reads in the anaerobic samples. Biologically, this could result some combination of two biological scenarios:</p>
+<ol type="1">
+<li>A small group of highly expressed genes being up-regulated in the anaerobic sample, which results in the TPMs of the remainder of the genes being reduced.</li>
+<li>The majority of genes in the anaerobic sample being downregulated, whereas a small group of highly expressed genes maintained relatively constant expression.</li>
+</ol>
+<p>Critically, the median of ratios normalization that DESeq will apply will essentially force the data to conform to the first scenario, although this may not actually reflect biological reality.</p>
+<p>Before proceeding to normalization, I would like to visualize this distribution in a different way in order to be as informed as possible before performing normalization. For this, I will make an MA plot using the TPM data.</p>
+<p><strong>Make an MA plot with the TPM data</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Make new columns with mean expression and  log2 fold-change</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>TPMs_filtered_df<span class="sc">$</span>mean_all <span class="ot">&lt;-</span> <span class="fu">rowMeans</span>(TPMs_filtered_df)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>TPMs_filtered_df<span class="sc">$</span>mean_aerobic <span class="ot">&lt;-</span> <span class="fu">rowMeans</span>(TPMs_filtered_df[, <span class="fu">c</span>(<span class="st">"aerobic_r1"</span>, <span class="st">"aerobic_r2"</span>)])</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>TPMs_filtered_df<span class="sc">$</span>mean_anaerobic <span class="ot">&lt;-</span> <span class="fu">rowMeans</span>(TPMs_filtered_df[, <span class="fu">c</span>(<span class="st">"anaerobic_r1"</span>, <span class="st">"anaerobic_r2"</span>)])</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>TPMs_filtered_df<span class="sc">$</span>log2fc <span class="ot">&lt;-</span> <span class="fu">log2</span>(TPMs_filtered_df<span class="sc">$</span>mean_anaerobic <span class="sc">/</span> TPMs_filtered_df<span class="sc">$</span>mean_aerobic)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Make the plot and save</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>TPMs_MA_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(TPMs_filtered_df, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">log10</span>(mean_all), <span class="at">y =</span> log2fc)) <span class="sc">+</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.3</span>, <span class="at">size =</span> <span class="fl">1.3</span>) <span class="sc">+</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">linewidth=</span><span class="fl">1.2</span>) <span class="sc">+</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">4</span>,<span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Mean log10(TPM)"</span>, <span class="at">y =</span> <span class="st">"log2 fold change"</span>) <span class="sc">+</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() </span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="co"># add histogram</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>comb_plot <span class="ot">&lt;-</span> <span class="fu">ggMarginal</span>(TPMs_MA_plot, <span class="at">type =</span> <span class="st">"histogram"</span>, <span class="at">margins =</span> <span class="st">"y"</span>, <span class="at">bins=</span><span class="dv">30</span>, <span class="at">fill=</span><span class="st">'grey'</span>)</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="co"># ggMarginal plots apparantly don't save well with ggsave</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">"./analysis_plots/TPMs_MA_plot_w_hist.png"</span>, <span class="at">width =</span> <span class="dv">6</span><span class="sc">*</span><span class="dv">300</span>, <span class="at">height =</span> <span class="dv">4</span><span class="sc">*</span><span class="dv">300</span>, <span class="at">res =</span> <span class="dv">300</span>)</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(comb_plot)</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./analysis_plots/TPMs_MA_plot_w_hist.png" class="img-fluid figure-img" style="width:90.0%"></p>
+<figcaption>Figure 5. MA plot using TPM data. The red line indicates no expression change between samples and the histogram shows the density of log2 fold changes for each gene. Genes with higher TPM values in the anaerobic samples have positive log2 fold change values.</figcaption>
+</figure>
+</div>
+<p><br>The MA plots makes this situation very clear. There is clearly a cluster of very highly expressed genes that are at higher levels in the anaerobic sample, but the majority of the rest of the genes in this sample make up a smaller proportion of the transcriptome than in the aerobic sample. I will proceed through normalization with caution keeping in mind that there are at least two biological scenarios that would lead to TPMs/counts data that looks like this.</p>
+</section>
+<section id="analysis-part-3-identify-de-genes-with-deseq2" class="level2">
+<h2 class="anchored" data-anchor-id="analysis-part-3-identify-de-genes-with-deseq2">Analysis part 3 – Identify DE genes with DESeq2</h2>
+<p>DESeq calculates on mapped counts, not TPMs. It also requires that the colnames of the txi$counts matrix match the rownames of the study_design data frame. We will change the column and row names accordingly, then load the counts data into a DESeq object (dds). Next, we will filter out genes with less than 10 counts across all samples so as to lessen the multiple testing burden when differential expression is calculated.</p>
+<p><br><strong>Import read counts into dds (DESeq2 object) and filter low-expression genes.</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set rownames of study design and colnames of txi$counts to match</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(txi<span class="sc">$</span>counts) <span class="ot">&lt;-</span> study_design<span class="sc">$</span>Sample_name</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(study_design) <span class="ot">&lt;-</span> study_design<span class="sc">$</span>Sample_name</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co"># create the DESeq object </span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>dds <span class="ot">&lt;-</span> <span class="fu">DESeqDataSetFromTximport</span>(<span class="at">txi=</span>txi, <span class="at">colData=</span>study_design, <span class="at">design =</span> <span class="sc">~</span> Condition)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter out genes with &lt;10 total counts across all samples</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>keepers <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(<span class="fu">counts</span>(dds)) <span class="sc">&gt;=</span> <span class="dv">10</span> </span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>dds <span class="ot">&lt;-</span> dds[keepers,]</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="co"># print results</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"DESeq object created with %d genes and %d samples</span><span class="sc">\n</span><span class="st">"</span>, <span class="fu">nrow</span>(dds), <span class="fu">ncol</span>(dds)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>DESeq object created with 5783 genes and 4 samples</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">paste</span>(<span class="st">"After filtering out genes with &lt;10 total counts across samples"</span>, <span class="fu">nrow</span>(dds), <span class="st">"genes remain"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>After filtering out genes with &lt;10 total counts across samples 5783 genes remain</code></pre>
+</div>
+</div>
+<p>Next, we specify the reference condition that will be used for calculating DE. Note that this is not actually necessary in this case as the default reference condition will be “aerobic” as it is alphabetically first, but it is good practice to explicitly set it nonetheless.</p>
+<p><br><strong>Set dds reference condition</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set reference condition. By default reference is the first alphabetically  </span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>dds<span class="sc">$</span>Condition <span class="ot">&lt;-</span> <span class="fu">relevel</span>(dds<span class="sc">$</span>Condition, <span class="at">ref=</span><span class="st">"aerobic"</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"Reference level set to: %s"</span>, <span class="fu">levels</span>(dds<span class="sc">$</span>Condition)[<span class="dv">1</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Reference level set to: aerobic</code></pre>
+</div>
+</div>
+<p>Now we run DESeq. The DESeq method does the following:</p>
+<ul>
+<li><p>Estimates size factors to correct for sequencing depth and library composition differences</p></li>
+<li><p>Estimates distinct dispersion values for each gene. This dispersion value is assumed to be an inherent property of the gene and thus is kept constant across all samples</p></li>
+<li><p>Fits a negative binomial GLM to the expression values for each gene. The dispersion values are incorporated into the model through the likelihood function used to fit the GLM. A Wald test is then used to determine whether the model fits the expression data significantly better when the condition-effect parameter ( β₁ below) ≠ 0: <br><br>
+<span class="math display">\[\log(\mu_{ij}) = \beta_0 + \beta_1 \times I(\text{Condition} = \text{anaerobic})\]</span></p></li>
+</ul>
+<p><strong>Run DESeq</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run DESeq</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>dds <span class="ot">&lt;-</span> <span class="fu">DESeq</span>(dds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><br><strong>Explore the size factors calculated by DESeq</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Try to print the size factors. If they are null, print normalization factors</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(<span class="fu">sizeFactors</span>(dds))) {</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">sprintf</span>(<span class="st">"DESeq analysis complete. Size Factors are: %s"</span>, </span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="fu">sizeFactors</span>(dds), <span class="at">collapse =</span> <span class="st">", "</span>))) </span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>((<span class="st">"DESeq analysis complete, but size Factors are NULL</span><span class="sc">\n</span><span class="st">"</span>))</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"Normalization factors are a %d by %d matrix"</span>, </span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nrow</span>(<span class="fu">normalizationFactors</span>(dds)), <span class="fu">ncol</span>(<span class="fu">normalizationFactors</span>(dds)))) </span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kbl</span>(<span class="fu">head</span>(<span class="fu">summary</span>(<span class="fu">normalizationFactors</span>(dds))), <span class="at">digits=</span><span class="dv">4</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>()}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>DESeq analysis complete, but size Factors are NULL
+Normalization factors are a 5783 by 4 matrix</code></pre>
+</div>
+<div class="cell-output-display">
+<table class="table caption-top table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th"></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">aerobic_r1</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">aerobic_r2</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">anaerobic_r1</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">anaerobic_r2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Min. :1.200</td>
+<td style="text-align: left;">Min. :1.202</td>
+<td style="text-align: left;">Min. :0.7892</td>
+<td style="text-align: left;">Min. :0.7805</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">1st Qu.:1.250</td>
+<td style="text-align: left;">1st Qu.:1.247</td>
+<td style="text-align: left;">1st Qu.:0.7991</td>
+<td style="text-align: left;">1st Qu.:0.8014</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Median :1.250</td>
+<td style="text-align: left;">Median :1.248</td>
+<td style="text-align: left;">Median :0.8000</td>
+<td style="text-align: left;">Median :0.8015</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Mean :1.250</td>
+<td style="text-align: left;">Mean :1.249</td>
+<td style="text-align: left;">Mean :0.7996</td>
+<td style="text-align: left;">Mean :0.8015</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">3rd Qu.:1.250</td>
+<td style="text-align: left;">3rd Qu.:1.249</td>
+<td style="text-align: left;">3rd Qu.:0.8004</td>
+<td style="text-align: left;">3rd Qu.:0.8016</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Max. :1.254</td>
+<td style="text-align: left;">Max. :1.298</td>
+<td style="text-align: left;">Max. :0.8333</td>
+<td style="text-align: left;">Max. :0.8320</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><br>This is interesting for multiple reasons. At a technical level seems that DESeq either calculates size factors or normalization factors. From what I understand, normalization factors are calculated when the counts are imported via a method that retains transcript length information, as is the case for import using tximport. In this case, the normalization factors take into account both the size factor and transcript length (and apparently GC content? – I’m not sure about this ATM), so as to allow normalized count comparisons across genes from the same sample and across samples.</p>
+<p>Alternatively, if counts are input using a different mapping pipeline that does actual alignment to the genome and does not keep track of (or seek to identify) transcript length, DESeq will calculate a single size factor for each sample. In this scenario, it is valid to compare normalized gene (or transcript) counts across samples, but not valid to compare counts across genes within or between samples, as no length normalization was done.</p>
+<p>In the case of these data, normalization factors were calculated as I imported Salmon assigned reads using tximport. Examining the normalization factors across samples reveals that the aerobic samples were assigned a median normalization factor of ~1.25, and thus these counts were reduced. In contrast, the median normalization factor assigned to the anaerobic samples was ~.80, and thus these counts were scaled up. This is exactly what I would have expected given the distribution of the TPMs assessed in part 2 – DESeq is essentially forcing the data into a distribution where the median gene expression difference across samples is 0. On a biological level, this means that DESeq is assuming that a small group of genes in the anaerobic sample is expressed more highly than in the aerobic sample, but otherwise differences in expression levels are roughly evenly distributed between sample pairs. This may or may not be the case…</p>
+<p>With this major caveat in mind, I will proceed. At a minimum I should still be able to identify genes that are expressed at very low levels in the aerobic condition and at moderate to high levels in the anaerobic condition.</p>
+<p>Okay, the next step is to get the results of the cross condition comparison and see which genes were called as differentially expressed at an FDR of 1%.</p>
+<p><br><strong>Get results from dds (S4 object) at an FDR &lt; .01</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">results</span>(dds, <span class="at">contrast =</span> <span class="fu">c</span>(<span class="st">"Condition"</span>, <span class="st">"anaerobic"</span>, <span class="st">"aerobic"</span>), <span class="at">alpha=</span>.<span class="dv">01</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><br><strong>Examine the first five rows of res (the S4 results object)</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">kbl</span>(<span class="fu">head</span>(res), <span class="at">digits=</span><span class="dv">4</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table caption-top table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th"></th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">baseMean</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">log2FoldChange</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">lfcSE</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">stat</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">pvalue</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">padj</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Q0045</td>
+<td style="text-align: right;">5.8830</td>
+<td style="text-align: right;">1.9627</td>
+<td style="text-align: right;">1.0960</td>
+<td style="text-align: right;">1.7907</td>
+<td style="text-align: right;">0.0733</td>
+<td style="text-align: right;">0.1083</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Q0050</td>
+<td style="text-align: right;">4.9694</td>
+<td style="text-align: right;">2.8620</td>
+<td style="text-align: right;">1.3210</td>
+<td style="text-align: right;">2.1666</td>
+<td style="text-align: right;">0.0303</td>
+<td style="text-align: right;">0.0487</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">YAL001C</td>
+<td style="text-align: right;">358.6077</td>
+<td style="text-align: right;">0.0072</td>
+<td style="text-align: right;">0.1242</td>
+<td style="text-align: right;">0.0580</td>
+<td style="text-align: right;">0.9537</td>
+<td style="text-align: right;">0.9649</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">YAL002W</td>
+<td style="text-align: right;">381.9712</td>
+<td style="text-align: right;">0.2170</td>
+<td style="text-align: right;">0.1158</td>
+<td style="text-align: right;">1.8733</td>
+<td style="text-align: right;">0.0610</td>
+<td style="text-align: right;">0.0922</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">YAL003W</td>
+<td style="text-align: right;">8955.3352</td>
+<td style="text-align: right;">0.9389</td>
+<td style="text-align: right;">0.0248</td>
+<td style="text-align: right;">37.8981</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">YAL005C</td>
+<td style="text-align: right;">3383.4904</td>
+<td style="text-align: right;">-1.1286</td>
+<td style="text-align: right;">0.0430</td>
+<td style="text-align: right;">-26.2677</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><br><strong>Print the number of genes called as significantly up- and down-regulated</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># First get the significantly up and down regulated genes</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="co"># which takes a logical vector and returns the indices of the TRUE values</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>sig_up_genes <span class="ot">&lt;-</span> res[<span class="fu">which</span>(res<span class="sc">$</span>padj <span class="sc">&lt;</span> .<span class="dv">01</span> <span class="sc">&amp;</span> res<span class="sc">$</span>log2FoldChange <span class="sc">&gt;</span> <span class="dv">0</span>),]</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>sig_down_genes <span class="ot">&lt;-</span> res[<span class="fu">which</span>(res<span class="sc">$</span>padj <span class="sc">&lt;</span> .<span class="dv">01</span> <span class="sc">&amp;</span> res<span class="sc">$</span>log2FoldChange <span class="sc">&lt;</span> <span class="dv">0</span>),]</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>perc_sig_diff <span class="ot">&lt;-</span> (<span class="fu">nrow</span>(sig_up_genes) <span class="sc">+</span> <span class="fu">nrow</span>(sig_down_genes))  <span class="sc">/</span> <span class="fu">nrow</span>(res) <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the results</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"DESeq called:</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="st">  %d genes significnatly upregulatged in the anaerobic sample</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="st">  %d genes significnatly downregulated in the anaerobic sample</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="st">  %.1f%% of all genes are differentially expressed"</span>, </span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nrow</span>(sig_up_genes), <span class="fu">nrow</span>(sig_down_genes), perc_sig_diff))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>DESeq called:
+  1601 genes significnatly upregulatged in the anaerobic sample
+  1573 genes significnatly downregulated in the anaerobic sample
+  54.9% of all genes are differentially expressed</code></pre>
+</div>
+</div>
+<p><br>This is a lot of differentially expressed genes! It’s actually a bit concerning. Given the caveats mentioned above regarding the read count distributions, as well as this observation that over 50% of the genes are being called as DE, this really makes me think that yeast growing in anaerobic vs aerobic conditions likely have <em>very</em> different gene expression profiles, and also potentially (likely?) different amounts of total intracellular transcripts. This is really not a situation that median of ratios normalization can handle very well. Ideally we would have some kind of internal standard or reference transcripts of known abundance, but alas…</p>
+<p>Nevertheless, I will continue. I should still be able to interpret the data under both a model in which most genes have reduced expression in the anaerobic sample, as well as in a model where gene expression differences are more symmetrical between samples.</p>
+<p>Next, I will now make an MA plot with the normalized counts to assess the relationship between absolute expression levels and differential expression between conditions, this time using the DESeq normalized data.</p>
+<p><br><strong>Make the normalized MA plot</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>res_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(res)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>res_df<span class="sc">$</span>color <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(res_df<span class="sc">$</span>padj <span class="sc">&lt;</span> .<span class="dv">01</span>, <span class="st">'black'</span>, <span class="st">'grey'</span>)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Make the plot and save</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(res_df, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">log10</span>(baseMean), <span class="at">y =</span> log2FoldChange, <span class="at">color=</span>color)) <span class="sc">+</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="fl">1.3</span>) <span class="sc">+</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">linewidth=</span><span class="fl">1.2</span>) <span class="sc">+</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="sc">-</span><span class="dv">4</span>,<span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Mean log10(normalized counts)"</span>, <span class="at">y =</span> <span class="st">"log2 fold change"</span>) <span class="sc">+</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_identity</span>()</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a><span class="co"># add histogram</span></span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>comb_plot <span class="ot">&lt;-</span> <span class="fu">ggMarginal</span>(p, <span class="at">type =</span> <span class="st">"histogram"</span>, <span class="at">margins =</span> <span class="st">"y"</span>, <span class="at">bins=</span><span class="dv">30</span>, <span class="at">fill=</span><span class="st">'grey'</span>)</span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a><span class="co"># ggMarginal plots apparantly don't save well with ggsave</span></span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">"./analysis_plots/norm_counts_MA_plot_w_hist.png"</span>, <span class="at">width =</span> <span class="dv">6</span><span class="sc">*</span><span class="dv">300</span>, <span class="at">height =</span> <span class="dv">4</span><span class="sc">*</span><span class="dv">300</span>, <span class="at">res =</span> <span class="dv">300</span>)</span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(comb_plot) <span class="co"># for some reason this is necessary to save</span></span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./analysis_plots/norm_counts_MA_plot_w_hist.png" class="img-fluid figure-img" style="width:85.0%"></p>
+<figcaption>Figure 6. MA plot with normalized counts. Black points represent differentially expressed genes and grey points other genes. Genes with higher expression in the anaerobic condition have positive log2 fold-change values.</figcaption>
+</figure>
+</div>
+<p><br> This looks about as expected. Median of ratios normalization shifted the distributions of reads per gene such that a similar number of genes are up- and down-regulated in each condition. This is DESeq forcing the data to fit its assumed model that gene expression changes are roughly symmetrical, with a similar number of genes being up and down-regulated in a given condition. This <em>may</em> reflect the biological reality of these samples, but i am skeptical. I learn more towards a model in which for cells grown in the anaerobic condition, a small set of genes increases in expression slightly (or not at all), but most of the genes are down-regulated.</p>
+<p>Regardless, I will proceed to assessing functional enrichment of the so called up- and down-regulated genes. I am curious which functional groups of genes are expressed at higher levels in the anaerobic sample, and which are strongly down-regulated. I am also curious if there is any functional similarity among the cluster of genes that are very highly expressed (1k - 10k average reads) and appear to be up-regulated in the anaerobic condition.</p>
+</section>
+<section id="analysis-part-4-assess-functional-enrichment-of-de-genes" class="level2">
+<h2 class="anchored" data-anchor-id="analysis-part-4-assess-functional-enrichment-of-de-genes">Analysis part 4 – Assess functional enrichment of DE genes</h2>
+<p>I want to get a general sense for the functional enrichment of genes that are called as differentially expressed in the DESeq analysis. To do this, I will use GSEA from the clusterProfiler package to identify functional enrichment among differentially expressed genes. The first step in GSEA is to create a list of all genes that is ranked by the log2 fold change, highest to lowest.</p>
+<p><br><strong>Create a list of all genes sorted by log2 fold change between conditions</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check for NA values in res before proceeding</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">sum</span>(<span class="fu">rowSums</span>(<span class="fu">is.na</span>(res))) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stop</span>(<span class="st">"Error: NA values found in res, you must filter these out"</span>)}</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="co"># create a named list with genes names and log2 fold change</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>gene_list <span class="ot">&lt;-</span> res<span class="sc">$</span>log2FoldChange</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(gene_list) <span class="ot">&lt;-</span> <span class="fu">rownames</span>(res)</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a><span class="co"># sort the gene list by log2 fold change</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>gene_list <span class="ot">&lt;-</span> <span class="fu">sort</span>(gene_list, <span class="at">decreasing =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><br><strong>Run GSEA using GO Biological Process (BP) groups</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>gsea_bp <span class="ot">&lt;-</span> <span class="fu">gseGO</span>(<span class="at">geneList =</span> gene_list,</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">OrgDb =</span> org.Sc.sgd.db, <span class="co"># The source of the GO groups</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">ont =</span> <span class="st">"BP"</span>,</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">keyType =</span> <span class="st">"ORF"</span>,  <span class="co"># This refers to the systematic gene name</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">minGSSize =</span> <span class="dv">10</span>,</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">maxGSSize =</span> <span class="dv">500</span>,</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">pvalueCutoff =</span> .<span class="dv">01</span>, <span class="co"># pre-MTC cutoff </span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>                 <span class="at">verbose =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>                 <span class="at">seed =</span> <span class="dv">123</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Display the top of the gsea_bp@result table</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(gsea_bp<span class="sc">@</span>result)) <span class="sc">%&gt;%</span> <span class="fu">kable_styling</span>(<span class="at">font_size =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table caption-top table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th"></th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">ID</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Description</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">setSize</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">enrichmentScore</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">NES</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">pvalue</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">p.adjust</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">qvalue</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">rank</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">leading_edge</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">core_enrichment</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">GO:0042254</td>
+<td style="text-align: left;">GO:0042254</td>
+<td style="text-align: left;">ribosome biogenesis</td>
+<td style="text-align: right;">401</td>
+<td style="text-align: right;">0.7181630</td>
+<td style="text-align: right;">3.347552</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1187</td>
+<td style="text-align: left;">tags=74%, list=21%, signal=63%</td>
+<td style="text-align: left;">YCR018C/YCR087C-A/YOR341W/YLR106C/YJL109C/YAL059W/YOR340C/YBL004W/YMR229C/YDR021W/YNL132W/YGR271C-A/YER131W/YMR290C/YPR010C/YMR049C/YLR264W/YPL193W/YKL143W/YHR197W/YGR128C/YDR324C/YPL012W/YIR026C/YDR060W/YHR052W/YDL060W/YGR280C/YKL078W/YGL029W/YCL059C/YDL148C/YNL182C/YPL226W/YGR103W/YPL131W/YDL136W/YBR154C/YDR025W/YPL198W/YHL015W/YDR083W/YGL078C/YBR189W/YFR001W/YEL026W/YDL208W/YMR128W/YKL014C/YIL019W/YOR310C/YKL009W/YLR175W/YGR145W/YOR210W/YLL045C/YGR034W/YPL043W/YOL144W/YCL054W/YDR496C/YNL112W/YKR057W/YOR004W/YDL014W/YGR090W/YDR087C/YJL122W/YPL217C/YAL025C/YLR340W/YGR245C/YOR369C/YGR162W/YGL076C/YER056C-A/YHR089C/YLR197W/YDL153C/YNR053C/YNL248C/YLR276C/YLR063W/YNL002C/YJL177W/YJR041C/YDL213C/YKR094C/YKR060W/YKL006W/YJR063W/YHR085W/YDL229W/YPR112C/YML026C/YOR293W/YLL008W/YOR243C/YBR247C/YML093W/YHL033C/YJR123W/YML063W/YMR269W/YJL033W/YDR365C/YOL077C/YOR287C/YLL011W/YLR009W/YKL172W/YIL096C/YJL191W/YIL148W/YGR159C/YOL127W/YOR206W/YKL156W/YNL069C/YMR230W/YOL041C/YLL034C/YLR185W/YLR336C/YNL096C/YPR187W/YML024W/YGL135W/YCR057C/YNL302C/YGL111W/YMR143W/YBR142W/YHR021C/YJL148W/YPL081W/YNL308C/YDL063C/YKR081C/YGL123W/YNR054C/YBR048W/YDL083C/YOR096W/YDR447C/YPL090C/YKL180W/YOR119C/YEL054C/YJR002W/YPL211W/YPL146C/YOR224C/YDR064W/YLR068W/YLR048W/YLR002C/YGL171W/YGR085C/YDR450W/YIL133C/YJL010C/YNL075W/YHR196W/YBR181C/YPR102C/YNR024W/YOL080C/YLR196W/YIL069C/YBR267W/YJL050W/YHR143W-A/YLR129W/YDR101C/YGL030W/YJL136C/YOL121C/YPL266W/YDR500C/YPL143W/YOR167C/YLR167W/YGR214W/YOR294W/YNL207W/YHR065C/YLR441C/YLR397C/YLR221C/YIL052C/YHR148W/YDR161W/YCR047C/YDR299W/YGL189C/YER082C/YGL099W/YOR272W/YLR435W/YCR016W/YDL191W/YLR409C/YMR093W/YER074W/YOR001W/YOR063W/YIL091C/YPL220W/YER102W/YDR091C/YDR398W/YPL126W/YBR141C/YHR169W/YLR222C/YLR448W/YLR022C/YGL120C/YKL082C/YNL178W/YER002W/YER006W/YPL093W/YKL021C/YCR031C/YHR072W-A/YOR145C/YPR110C/YMR014W/YMR131C/YGR081C/YOL040C/YKR024C/YNL110C/YOR056C/YCR072C/YML073C/YLR344W/YDR418W/YPR144C/YOL022C/YNL113W/YLR075W/YEL055C/YJL069C/YGR195W/YLR293C/YHL001W/YDL031W/YHR088W/YNL061W/YBL072C/YGR118W/YPR041W/YOR234C/YDR449C/YOR078W/YDL036C/YKR063C/YPR132W/YFR031C-A/YKL099C/YLR186W/YOR006C/YHR081W/YHR066W/YPR143W/YHR064C/YGR158C/YGR285C/YPR137W/YPR169W/YNL209W/YER007C-A/YGL246C/YLR192C/YER126C/YDR412W/YAL035W/YER127W/YCL031C/YNR046W/YDR339C/YHR062C/YMR239C/YHR170W/YJR042W/YLR051C/YIR012W/YKL186C/YGR095C/YFL023W/YLR074C/YPL239W</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">GO:0006364</td>
+<td style="text-align: left;">GO:0006364</td>
+<td style="text-align: left;">rRNA processing</td>
+<td style="text-align: right;">290</td>
+<td style="text-align: right;">0.7351851</td>
+<td style="text-align: right;">3.339477</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1158</td>
+<td style="text-align: left;">tags=76%, list=20%, signal=64%</td>
+<td style="text-align: left;">YCR018C/YCR087C-A/YLR106C/YJL109C/YBL004W/YMR229C/YDR021W/YNL132W/YGR271C-A/YER131W/YMR290C/YMR049C/YLR264W/YHR197W/YGR128C/YDR324C/YPL012W/YHR052W/YDL060W/YGR280C/YKL078W/YGL029W/YCL059C/YDL148C/YNL182C/YGR103W/YDL136W/YDR025W/YPL198W/YHL015W/YDR083W/YGL078C/YBR189W/YFR001W/YEL026W/YDL208W/YMR128W/YKL014C/YIL019W/YOR310C/YKL009W/YLR175W/YGR145W/YLL045C/YPL043W/YOL144W/YCL054W/YNL112W/YKR057W/YOR004W/YDL014W/YGR090W/YDR087C/YPL217C/YAL025C/YOR369C/YGL076C/YHR089C/YLR197W/YDL153C/YLR276C/YLR063W/YNL002C/YJL177W/YJR041C/YDL213C/YKR060W/YKL006W/YHR085W/YDL229W/YPR112C/YML026C/YLL008W/YOR243C/YBR247C/YML093W/YHL033C/YJR123W/YML063W/YJL033W/YDR365C/YOL077C/YOR287C/YLL011W/YKL172W/YIL096C/YJL191W/YGR159C/YKL156W/YNL069C/YOL041C/YLR185W/YNL096C/YGL135W/YCR057C/YGL111W/YMR143W/YBR142W/YHR021C/YPL081W/YNL308C/YKR081C/YGL123W/YNR054C/YBR048W/YDL083C/YOR096W/YPL090C/YKL180W/YOR119C/YJR002W/YPL211W/YPL146C/YDR064W/YLR068W/YLR048W/YLR002C/YGL171W/YDR450W/YIL133C/YJL010C/YNL075W/YHR196W/YBR181C/YNR024W/YOL080C/YLR196W/YIL069C/YJL050W/YLR129W/YGL030W/YJL136C/YPL266W/YDR500C/YPL143W/YOR167C/YLR167W/YGR214W/YOR294W/YNL207W/YHR065C/YLR441C/YHR148W/YCR047C/YDR299W/YGL189C/YER082C/YOR272W/YLR435W/YCR016W/YDL191W/YLR409C/YMR093W/YER074W/YOR001W/YOR063W/YIL091C/YPL220W/YER102W/YDR091C/YDR398W/YPL126W/YBR141C/YHR169W/YLR222C/YGL120C/YKL082C/YER002W/YER006W/YPL093W/YKL021C/YCR031C/YHR072W-A/YOR145C/YMR014W/YMR131C/YGR081C/YKR024C/YNL110C/YOR056C/YPR144C/YOL022C/YEL055C/YJL069C/YGR195W/YLR293C/YHL001W/YDL031W/YHR088W/YNL061W/YBL072C/YGR118W/YDR449C/YOR078W/YDL036C/YKR063C/YPR132W/YKL099C/YLR186W/YOR006C/YHR081W/YHR066W/YPR143W/YHR064C/YGR158C/YGR285C/YPR137W/YNL209W/YGL246C/YLR192C/YER126C/YDR412W/YAL035W/YER127W/YCL031C/YNR046W/YDR339C/YHR062C/YMR239C/YLR051C/YGR095C</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">GO:0022613</td>
+<td style="text-align: left;">GO:0022613</td>
+<td style="text-align: left;">ribonucleoprotein complex biogenesis</td>
+<td style="text-align: right;">483</td>
+<td style="text-align: right;">0.6776088</td>
+<td style="text-align: right;">3.219262</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1310</td>
+<td style="text-align: left;">tags=68%, list=23%, signal=57%</td>
+<td style="text-align: left;">YCR018C/YCR087C-A/YOR341W/YLR106C/YJL109C/YAL059W/YOR340C/YBL004W/YMR229C/YDR021W/YNL132W/YGR271C-A/YER131W/YMR290C/YPR010C/YMR049C/YLR264W/YPL193W/YKL143W/YHR197W/YGR128C/YDR324C/YPL012W/YIR026C/YDR060W/YHR052W/YDL060W/YGR280C/YKL078W/YGL029W/YCL059C/YDL148C/YNL182C/YPL226W/YGR103W/YPL131W/YDL136W/YBR154C/YDR025W/YPL198W/YHL015W/YDR083W/YGL078C/YBR189W/YFR001W/YEL026W/YDL208W/YMR128W/YKL014C/YIL019W/YOR310C/YKL009W/YLR175W/YGR145W/YOR210W/YLL045C/YGR034W/YPL043W/YOL144W/YCL054W/YDR496C/YNL112W/YKR057W/YOR004W/YDL014W/YMR260C/YGR090W/YDR087C/YJL122W/YPL217C/YAL025C/YLR340W/YGR245C/YOR369C/YGR162W/YGL076C/YER056C-A/YHR089C/YLR197W/YDL153C/YNR053C/YNL248C/YLR276C/YLR063W/YNL002C/YJL177W/YJR041C/YDL213C/YKR094C/YKR060W/YKL006W/YJR063W/YHR085W/YDL229W/YPR112C/YML026C/YLR325C/YOR293W/YLL008W/YOR243C/YBR247C/YML093W/YHL033C/YJR123W/YML063W/YMR269W/YJL033W/YDR365C/YOL077C/YOR287C/YLL011W/YLR009W/YKL172W/YIL096C/YJL191W/YIL148W/YGR159C/YOL127W/YOR206W/YKL156W/YNL069C/YMR230W/YOL041C/YLL034C/YLR185W/YLR336C/YNL096C/YPR187W/YML024W/YGL135W/YCR057C/YNL302C/YGL111W/YMR143W/YBR142W/YHR021C/YJL148W/YPL081W/YNL308C/YDL063C/YKR081C/YGL123W/YNR054C/YBR048W/YDL083C/YOR096W/YDR447C/YPL090C/YKL180W/YOR119C/YEL054C/YJR002W/YPL211W/YPL146C/YOR224C/YDR064W/YLR068W/YLR048W/YLR002C/YGL171W/YGR085C/YDR450W/YIL133C/YJL010C/YNL075W/YHR196W/YBR181C/YPR102C/YNR024W/YOL080C/YLR196W/YIL069C/YBR267W/YJL050W/YHR143W-A/YLR129W/YDR101C/YGL030W/YJL136C/YOL121C/YPL266W/YDR500C/YPL143W/YOR167C/YLR167W/YGR214W/YPR163C/YOR294W/YNL207W/YHR065C/YLR441C/YLR397C/YLR221C/YIL052C/YIL104C/YHR148W/YDR161W/YCR047C/YDR299W/YGL189C/YER082C/YGL099W/YOR272W/YLR435W/YCR016W/YDL191W/YLR409C/YMR093W/YER074W/YOR001W/YOR063W/YIL091C/YPL220W/YER102W/YDR091C/YDR398W/YPL126W/YBR141C/YBR079C/YHR169W/YLR222C/YLR448W/YLR022C/YGL120C/YKL082C/YNL178W/YER002W/YER006W/YPL093W/YKL021C/YCR031C/YHR072W-A/YOR145C/YPR110C/YMR014W/YMR131C/YGR081C/YOL040C/YKR024C/YNL110C/YOR056C/YCR072C/YML073C/YLR344W/YDR418W/YPR144C/YOL022C/YNL113W/YLR075W/YKR059W/YEL055C/YJL069C/YGR195W/YLR293C/YHL001W/YDL031W/YHR088W/YNL061W/YBL072C/YGR118W/YPR041W/YML046W/YOR234C/YDR449C/YOR078W/YDL036C/YOR361C/YKR063C/YJL138C/YPR132W/YFR031C-A/YER172C/YKL099C/YMR268C/YLR186W/YOR006C/YBR055C/YHR081W/YHR066W/YPR143W/YHR064C/YMR309C/YGR158C/YGR285C/YPR137W/YPR169W/YNL209W/YDL043C/YER007C-A/YGL246C/YLR192C/YDR429C/YER126C/YDR412W/YAL035W/YER127W/YCL031C/YNR046W/YDR190C/YDR339C/YMR146C/YHR062C/YMR239C/YHR170W/YJR042W/YLR051C/YIR012W/YKL186C/YGR095C/YFR005C/YFL023W/YLR074C/YPL239W/YKL183W/YDR361C/YJR014W/YGR091W/YGR251W/YNL163C/YER025W/YNL124W/YOL021C/YJR007W/YER036C/YNL244C/YIL115C/YNL227C</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">GO:0016072</td>
+<td style="text-align: left;">GO:0016072</td>
+<td style="text-align: left;">rRNA metabolic process</td>
+<td style="text-align: right;">345</td>
+<td style="text-align: right;">0.6965472</td>
+<td style="text-align: right;">3.212858</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1158</td>
+<td style="text-align: left;">tags=68%, list=20%, signal=58%</td>
+<td style="text-align: left;">YCR018C/YCR087C-A/YOR341W/YLR106C/YJL109C/YOR340C/YBL004W/YMR229C/YDR021W/YNL132W/YGR271C-A/YER131W/YMR290C/YPR010C/YMR049C/YLR264W/YHR197W/YGR128C/YDR324C/YPL012W/YHR052W/YDL060W/YGR280C/YKL078W/YGL029W/YCL059C/YDL148C/YNL182C/YGR103W/YDL136W/YDR025W/YPL198W/YHL015W/YDR083W/YGL078C/YBR189W/YFR001W/YEL026W/YDL208W/YMR128W/YKL014C/YIL019W/YOR310C/YKL009W/YLR175W/YGR145W/YLL045C/YPL043W/YOL144W/YCL054W/YNL112W/YKR057W/YOR004W/YDL014W/YGR090W/YDR087C/YPL217C/YAL025C/YOR369C/YMR116C/YGL076C/YHR089C/YLR197W/YDL153C/YNL248C/YLR276C/YLR063W/YNL002C/YJL177W/YJR041C/YDL213C/YKR060W/YKL006W/YJL025W/YJR063W/YHR085W/YDL229W/YPR112C/YML026C/YLL008W/YOR243C/YBR247C/YML093W/YHL033C/YJR123W/YML063W/YJL033W/YDR365C/YOL077C/YOR287C/YLL011W/YKL172W/YIL096C/YJL191W/YGR159C/YKL156W/YNL069C/YOL041C/YLR185W/YNL096C/YMR233W/YGL135W/YCR057C/YGL111W/YMR143W/YBR142W/YHR021C/YJL148W/YPL081W/YNL308C/YKR081C/YGL123W/YNR054C/YBR048W/YDL083C/YOR096W/YPL090C/YKL180W/YOR119C/YJR002W/YPL211W/YPL146C/YDR064W/YLR068W/YLR048W/YLR002C/YGL171W/YDR450W/YIL133C/YJL010C/YNL075W/YHR196W/YBR181C/YNR024W/YOL080C/YLR196W/YIL069C/YJL050W/YLR129W/YGL030W/YJL136C/YPL266W/YDR500C/YPL143W/YOR167C/YLR167W/YGR214W/YOR294W/YNL207W/YHR065C/YLR441C/YHR148W/YCR047C/YDR299W/YGL189C/YER082C/YOR272W/YLR435W/YCR016W/YDL191W/YLR409C/YMR093W/YER074W/YOR001W/YOR063W/YIL091C/YPL220W/YER102W/YDR091C/YDR398W/YPL126W/YBR141C/YHR169W/YLR222C/YGL120C/YKL082C/YNL178W/YER002W/YER006W/YPL093W/YKL021C/YCR031C/YHR072W-A/YOR145C/YMR014W/YMR131C/YGR081C/YKR024C/YNL110C/YOR056C/YPR144C/YOL022C/YEL055C/YJL069C/YGR195W/YLR293C/YHL001W/YDL031W/YHR088W/YNL061W/YBL072C/YGR118W/YDR449C/YOR078W/YLR141W/YDL036C/YDR266C/YIL161W/YKR063C/YPR132W/YKL099C/YLR186W/YOR006C/YHR081W/YHR066W/YPR143W/YHR064C/YGR158C/YGR285C/YPR137W/YNL209W/YER148W/YGL246C/YLR192C/YER126C/YDR412W/YAL035W/YER127W/YCL031C/YNR046W/YDR339C/YHR062C/YMR239C/YLR051C/YGR095C</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">GO:0042274</td>
+<td style="text-align: left;">GO:0042274</td>
+<td style="text-align: left;">ribosomal small subunit biogenesis</td>
+<td style="text-align: right;">140</td>
+<td style="text-align: right;">0.7779247</td>
+<td style="text-align: right;">3.185484</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1112</td>
+<td style="text-align: left;">tags=88%, list=19%, signal=73%</td>
+<td style="text-align: left;">YJL109C/YBL004W/YMR229C/YDR021W/YNL132W/YGR271C-A/YMR290C/YLR264W/YKL143W/YGR128C/YDR324C/YPL012W/YDL060W/YKL078W/YCL059C/YDL148C/YPL226W/YGR103W/YDR025W/YHL015W/YBR189W/YFR001W/YEL026W/YMR128W/YIL019W/YOR310C/YGR145W/YKR057W/YOR004W/YPL217C/YOR369C/YDL153C/YDL213C/YKR060W/YPR112C/YML026C/YBR247C/YML093W/YJR123W/YML063W/YMR269W/YOR287C/YLL011W/YJL191W/YGR159C/YKL156W/YLR336C/YNL096C/YML024W/YCR057C/YNL302C/YMR143W/YHR021C/YPL081W/YNL308C/YNR054C/YBR048W/YDL083C/YOR096W/YDR447C/YPL090C/YOR119C/YJR002W/YDR064W/YLR068W/YLR048W/YGL171W/YDR450W/YJL010C/YNL075W/YHR196W/YBR181C/YIL069C/YLR129W/YJL136C/YOL121C/YPL266W/YOR167C/YLR167W/YGR214W/YOR294W/YNL207W/YHR065C/YLR441C/YHR148W/YCR047C/YDR299W/YER082C/YLR435W/YMR093W/YER074W/YIL091C/YER102W/YDR398W/YPL126W/YHR169W/YLR222C/YGL120C/YKL082C/YCR031C/YOR145C/YMR014W/YGR081C/YOL040C/YOR056C/YPR144C/YOL022C/YJL069C/YBL072C/YGR118W/YDR449C/YOR078W/YPR132W/YKL099C/YLR186W/YOR006C/YPR137W/YLR192C/YAL035W/YER127W/YCL031C/YNR046W/YDR339C</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">GO:0030490</td>
+<td style="text-align: left;">GO:0030490</td>
+<td style="text-align: left;">maturation of SSU-rRNA</td>
+<td style="text-align: right;">116</td>
+<td style="text-align: right;">0.7977454</td>
+<td style="text-align: right;">3.175292</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1112</td>
+<td style="text-align: left;">tags=91%, list=19%, signal=75%</td>
+<td style="text-align: left;">YJL109C/YBL004W/YMR229C/YDR021W/YNL132W/YGR271C-A/YMR290C/YLR264W/YGR128C/YDR324C/YPL012W/YDL060W/YKL078W/YCL059C/YDL148C/YGR103W/YDR025W/YHL015W/YBR189W/YFR001W/YEL026W/YMR128W/YIL019W/YOR310C/YGR145W/YKR057W/YOR004W/YPL217C/YOR369C/YDL153C/YKR060W/YPR112C/YML026C/YBR247C/YML093W/YJR123W/YML063W/YOR287C/YLL011W/YJL191W/YKL156W/YCR057C/YMR143W/YHR021C/YPL081W/YNL308C/YNR054C/YBR048W/YDL083C/YPL090C/YOR119C/YJR002W/YDR064W/YLR068W/YLR048W/YGL171W/YDR450W/YJL010C/YHR196W/YBR181C/YIL069C/YLR129W/YJL136C/YPL266W/YOR167C/YLR167W/YGR214W/YOR294W/YNL207W/YHR065C/YLR441C/YCR047C/YDR299W/YER082C/YLR435W/YMR093W/YER074W/YIL091C/YER102W/YDR398W/YPL126W/YHR169W/YLR222C/YGL120C/YCR031C/YOR145C/YMR014W/YGR081C/YOR056C/YPR144C/YOL022C/YJL069C/YBL072C/YGR118W/YDR449C/YOR078W/YPR132W/YKL099C/YLR186W/YOR006C/YPR137W/YLR192C/YAL035W/YER127W/YNR046W/YDR339C</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><br><strong>Print the number of significantly enriched GO BP groups</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">paste</span>(<span class="st">"GSEA called"</span>, <span class="fu">nrow</span>(gsea_bp<span class="sc">@</span>result), <span class="st">"significantly enriched BP terms"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>GSEA called 150 significantly enriched BP terms</code></pre>
+</div>
+</div>
+<p><br>149 GO terms is too many to easily visualize. For now, I will subset these to just the SGD GO Slim terms.</p>
+<p><br><strong>Subset GSEA results to only include GO Slim BP groups</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the GO Slim terms from the SGD file</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>GO_slim_terms <span class="ot">&lt;-</span> <span class="fu">system</span>(<span class="st">"cut -f6 ./data/reference/go_slim_mapping.tab |\</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="st">                        sort | uniq"</span>, <span class="at">intern=</span><span class="cn">TRUE</span>)</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a new GSEA_bp object that is filtered to only inclue Slim groups </span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>gsea_bp_slim <span class="ot">&lt;-</span>  gsea_bp</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>gsea_bp_slim<span class="sc">@</span>result <span class="ot">&lt;-</span> gsea_bp<span class="sc">@</span>result[gsea_bp<span class="sc">@</span>result<span class="sc">$</span>ID <span class="sc">%in%</span> GO_slim_terms, ]</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">paste</span>(<span class="st">"There are now"</span>, <span class="fu">nrow</span>(gsea_bp_slim<span class="sc">@</span>result), </span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>          <span class="st">"significanty enriched GO Slim terms"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>There are now 28 significanty enriched GO Slim terms</code></pre>
+</div>
+</div>
+<p>28 GO Slims terms will be easier to visualize and should still give a good sense for major gene expression trends. I will make a ridgeplot to visualize this. We will show only the distributions of all genes in each group, not just the core genes (core genes are those that ranked prior to the enrichment score maximum in the GSEA algorithm).</p>
+<p><br><strong>Create core genes ridgeplot with 28 GO Slim BP terms</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>GO_slim_bp_ridgeplot <span class="ot">&lt;-</span> <span class="fu">ridgeplot</span>(gsea_bp_slim, <span class="at">showCategory =</span> <span class="dv">28</span>,</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>                               <span class="at">label_format =</span> <span class="dv">50</span>, <span class="at">core_enrichment =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">theme</span>(<span class="at">axis.text.y =</span> <span class="fu">element_text</span> (<span class="at">size=</span><span class="dv">12</span>)) <span class="sc">+</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"enrichment distribution"</span>)</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"./analysis_plots/GO_slim_bp_ridgeplot.png"</span>, GO_slim_bp_ridgeplot,</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="dv">10</span>, <span class="at">dpi =</span> <span class="dv">300</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Picking joint bandwidth of 0.194</code></pre>
+</div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./analysis_plots/GO_slim_bp_ridgeplot.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption>Figure 7. GO Slim BP ridgeplot. Positive Enrichment values indicate up-regulation in the anaerobic condition.</figcaption>
+</figure>
+</div>
+<p>Very neat. It definitely does make biological sense that gene groups associated with mitochondrial organization and mitochondrial translation would be down-regulated under anaerobic conditions. It makes less sense that genes associated with ribosome biogenesis would be up-regulated during anaerobic growth. These data makes me wonder two things:</p>
+<ol type="1">
+<li>What conditions exactly were these yeast grown in? It’s very frustrating that this information was not provided along with the sequencing reads.</li>
+<li>I am very skeptical that median of ratios normalization was the best method here. It think it is probably more likely that these ribosomal genes remained at similar expression levels in the anaerobic conditions compared to the aerobic condition (or maybe even decreased, just less than the other genes). This scenario would result in the ribosomal associated transcripts making up a larger proportion of the transcriptome, which would be consistent with the TPM data, as well as these post-normalization results.</li>
+</ol>
+<p>I will probe a bit further here to see if I can get a better sense for what is going on in these cells. For this, I will assess GSEA enrichment of cellular compartment to see if the upregulated ribosomal genes are specifically associated with the cytoplasm. If they are, I would be somewhat more likely to believe they are upregulated in anaerobic conditions.</p>
+<p><br><strong>Run GSEA to assess enrichment of genes in cellular compartment (CC) GO groups</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>gsea_cc <span class="ot">&lt;-</span> <span class="fu">gseGO</span>(<span class="at">geneList =</span> gene_list,</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">OrgDb =</span> org.Sc.sgd.db,</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">ont =</span> <span class="st">"CC"</span>,</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">keyType =</span> <span class="st">"ORF"</span>,  <span class="co"># This refers to the systematic gene name</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">minGSSize =</span> <span class="dv">10</span>,</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">maxGSSize =</span> <span class="dv">500</span>,</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">pvalueCutoff =</span> .<span class="dv">01</span>, <span class="co"># pre-MTC cutoff </span></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>                 <span class="at">verbose =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>                 <span class="at">seed =</span> <span class="dv">123</span>)</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">paste</span>(<span class="st">"GSEA called"</span>, <span class="fu">nrow</span>(gsea_cc<span class="sc">@</span>result), <span class="st">"significantly enriched BP terms"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>GSEA called 64 significantly enriched BP terms</code></pre>
+</div>
+</div>
+<p>64 CC GO groups is too many to easily visualize but I will look at the top 30 most significantly enriched.</p>
+<p><br><strong>Make a ridgeplot with the CC enrichment data</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>GO_slim_cc_ridgeplot <span class="ot">&lt;-</span> <span class="fu">ridgeplot</span>(gsea_cc, <span class="at">showCategory =</span> <span class="dv">30</span>,</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>                               <span class="at">label_format =</span> <span class="dv">50</span>, <span class="at">core_enrichment =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">theme</span>(<span class="at">axis.text.y =</span> <span class="fu">element_text</span> (<span class="at">size=</span><span class="dv">12</span>)) <span class="sc">+</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"enrichment distribution"</span>)</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"./analysis_plots/GO_slim_cc_ridgeplot.png"</span>, GO_slim_cc_ridgeplot,</span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="dv">10</span>, <span class="at">dpi =</span> <span class="dv">300</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Picking joint bandwidth of 0.15</code></pre>
+</div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./analysis_plots/GO_slim_cc_ridgeplot.png" class="img-fluid figure-img" style="width:75.0%"></p>
+<figcaption>Figure 7. GO Slim CC Ridgeplot. Positive Enrichment values indicate up-regulation in the anaerobic condition.</figcaption>
+</figure>
+</div>
+<p><br>This is very interesting! It looks like the upregulated ribosomal genes in the anaerobic condition are associated with the cytoplasm, whereas ribosomal gens associated with the mitochondria are actually downregulated. This clear upregulation of cytosolic genes and downregulation of mitochondrial genes would be consistent with anaerobic growth, so I think that generally think makes sense. I just question whether the up-regulation is real or whether these genes are just proportionally expressed at higher levels relative to other genes. Quantitative RNA-seq or even some qPCR would be really nice here…</p>
+<p>Anyway, I’m also curious to visualize the core genes from some of the highly enriched gene groups on the MA plot to get a sense for the relationship between absolute expression levels and changes in specific biological processes. I am specifically interested in whether the cluster of highly expressed genes that showed increased expression in the anaerobic condition have a similar function (e.g.&nbsp;ribosomal associated)?</p>
+<p>For this, I’ll get a list of the most highly enriched GO terms in the cellular compartment GSEA results. Then I’ll pick a few that seem interesting and visualize the genes belonging to them on the normalized MA plot.</p>
+<p><br><strong>Sort the GSEA CC results by p-value and display the top 10 groups</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>gsea_df <span class="ot">&lt;-</span> gsea_cc<span class="sc">@</span>result</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>gsea_df <span class="ot">&lt;-</span> gsea_df <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(p.adjust)  <span class="sc">%&gt;%</span> </span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(NES, Description, setSize, p.adjust)</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Only show the top 12</span></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(gsea_df, <span class="dv">14</span>), <span class="at">digits=</span><span class="dv">2</span>) <span class="sc">%&gt;%</span> <span class="fu">kable_styling</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table caption-top table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th"></th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">NES</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Description</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">setSize</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">p.adjust</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">GO:0030684</td>
+<td style="text-align: right;">3.34</td>
+<td style="text-align: left;">preribosome</td>
+<td style="text-align: right;">170</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">GO:0022626</td>
+<td style="text-align: right;">3.31</td>
+<td style="text-align: left;">cytosolic ribosome</td>
+<td style="text-align: right;">167</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">GO:0022625</td>
+<td style="text-align: right;">3.15</td>
+<td style="text-align: left;">cytosolic large ribosomal subunit</td>
+<td style="text-align: right;">88</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">GO:0005730</td>
+<td style="text-align: right;">3.12</td>
+<td style="text-align: left;">nucleolus</td>
+<td style="text-align: right;">300</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">GO:0030686</td>
+<td style="text-align: right;">3.09</td>
+<td style="text-align: left;">90S preribosome</td>
+<td style="text-align: right;">92</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">GO:0032040</td>
+<td style="text-align: right;">2.88</td>
+<td style="text-align: left;">small-subunit processome</td>
+<td style="text-align: right;">53</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">GO:0022627</td>
+<td style="text-align: right;">2.87</td>
+<td style="text-align: left;">cytosolic small ribosomal subunit</td>
+<td style="text-align: right;">62</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">GO:0030687</td>
+<td style="text-align: right;">2.78</td>
+<td style="text-align: left;">preribosome, large subunit precursor</td>
+<td style="text-align: right;">62</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">GO:0044391</td>
+<td style="text-align: right;">2.62</td>
+<td style="text-align: left;">ribosomal subunit</td>
+<td style="text-align: right;">233</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">GO:0005840</td>
+<td style="text-align: right;">2.54</td>
+<td style="text-align: left;">ribosome</td>
+<td style="text-align: right;">263</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">GO:0015934</td>
+<td style="text-align: right;">2.49</td>
+<td style="text-align: left;">large ribosomal subunit</td>
+<td style="text-align: right;">136</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">GO:0005740</td>
+<td style="text-align: right;">-2.47</td>
+<td style="text-align: left;">mitochondrial envelope</td>
+<td style="text-align: right;">450</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">GO:0005759</td>
+<td style="text-align: right;">-2.47</td>
+<td style="text-align: left;">mitochondrial matrix</td>
+<td style="text-align: right;">241</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">GO:0098798</td>
+<td style="text-align: right;">-2.44</td>
+<td style="text-align: left;">mitochondrial protein-containing complex</td>
+<td style="text-align: right;">150</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><br><strong>Put the normalized counts from dds into a dataframe and calculate means and log2 fold change</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># extract normalized counts into a df</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>dds_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">counts</span>(dds, <span class="at">normalized=</span><span class="cn">TRUE</span>))</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate condition means and log2 FC</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>dds_df <span class="ot">&lt;-</span> <span class="fu">mutate</span>(dds_df, </span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">aerobic_mean =</span> (aerobic_r1 <span class="sc">+</span> aerobic_r2) <span class="sc">/</span> <span class="dv">2</span>,</span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">anaerobic_mean =</span> (anaerobic_r1 <span class="sc">+</span> anaerobic_r2) <span class="sc">/</span> <span class="dv">2</span>,</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>                 <span class="at">log2fc =</span> <span class="fu">log2</span>(anaerobic_mean <span class="sc">/</span> aerobic_mean))</span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate mean expression across all conditions</span></span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>dds_df<span class="sc">$</span>mean <span class="ot">&lt;-</span> <span class="fu">rowMeans</span>(dds_df[,<span class="fu">c</span>(<span class="st">'aerobic_r1'</span>, <span class="st">'aerobic_r2'</span>, <span class="st">'anaerobic_r1'</span>, <span class="st">'anaerobic_r2'</span>)])</span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a><span class="co"># add a gene names column</span></span>
+<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a>dds_df<span class="sc">$</span>gene <span class="ot">&lt;-</span> <span class="fu">rownames</span>(dds_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><br><strong>Make individual plots with interesting GO CC groups</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Go groups of interest</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>GO_groups <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">'GO:0005730'</span>, <span class="st">'GO:0022626'</span>, <span class="st">'GO:0005740'</span>, <span class="st">'GO:0009277'</span>)</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a><span class="co"># initialize the plot list </span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>plot_list <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a><span class="co"># add a gene column to the res_df</span></span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>res_df<span class="sc">$</span>gene <span class="ot">&lt;-</span> <span class="fu">rownames</span>(res_df)</span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a><span class="co"># make each of the four plots</span></span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>) {</span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a>  GO_group <span class="ot">&lt;-</span> GO_groups[i]</span>
+<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb43-14"><a href="#cb43-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># get gene goup data from gsea object</span></span>
+<span id="cb43-15"><a href="#cb43-15" aria-hidden="true" tabindex="-1"></a>  core_genes_str <span class="ot">&lt;-</span> gsea_cc<span class="sc">@</span>result[gsea_cc<span class="sc">@</span>result<span class="sc">$</span>ID<span class="sc">==</span>GO_group, <span class="fu">c</span>(<span class="st">'core_enrichment'</span>)]</span>
+<span id="cb43-16"><a href="#cb43-16" aria-hidden="true" tabindex="-1"></a>  description <span class="ot">&lt;-</span> gsea_cc<span class="sc">@</span>result[gsea_cc<span class="sc">@</span>result<span class="sc">$</span>ID<span class="sc">==</span>GO_group, <span class="fu">c</span>(<span class="st">'Description'</span>)]</span>
+<span id="cb43-17"><a href="#cb43-17" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb43-18"><a href="#cb43-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># extract the core genes with strsplit</span></span>
+<span id="cb43-19"><a href="#cb43-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># use [[1]] because strsplit returns a list of lists</span></span>
+<span id="cb43-20"><a href="#cb43-20" aria-hidden="true" tabindex="-1"></a>  core_genes <span class="ot">&lt;-</span> <span class="fu">strsplit</span>(core_genes_str, <span class="st">"/"</span>)[[<span class="dv">1</span>]] </span>
+<span id="cb43-21"><a href="#cb43-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb43-22"><a href="#cb43-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># make a temporary dds_df so that I can specify gene group assignments </span></span>
+<span id="cb43-23"><a href="#cb43-23" aria-hidden="true" tabindex="-1"></a>  plot_df <span class="ot">&lt;-</span> res_df <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">GO_group =</span> <span class="fu">ifelse</span>(gene <span class="sc">%in%</span> core_genes, GO_group, <span class="st">'Other'</span>))</span>
+<span id="cb43-24"><a href="#cb43-24" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb43-25"><a href="#cb43-25" aria-hidden="true" tabindex="-1"></a>  <span class="co"># make the plot </span></span>
+<span id="cb43-26"><a href="#cb43-26" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(plot_df, <span class="fu">aes</span>(<span class="at">x=</span><span class="fu">log10</span>(baseMean), <span class="at">y=</span>log2FoldChange)) <span class="sc">+</span></span>
+<span id="cb43-27"><a href="#cb43-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">data =</span> <span class="fu">filter</span>(plot_df, GO_group <span class="sc">==</span> <span class="st">'Other'</span>), </span>
+<span id="cb43-28"><a href="#cb43-28" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb43-29"><a href="#cb43-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">data =</span> <span class="fu">filter</span>(plot_df, GO_group <span class="sc">!=</span> <span class="st">'Other'</span>), </span>
+<span id="cb43-30"><a href="#cb43-30" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">'red'</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb43-31"><a href="#cb43-31" aria-hidden="true" tabindex="-1"></a>   <span class="fu">ylim</span>(<span class="sc">-</span><span class="fl">3.5</span>,<span class="fl">3.5</span>) <span class="sc">+</span></span>
+<span id="cb43-32"><a href="#cb43-32" aria-hidden="true" tabindex="-1"></a>   <span class="fu">xlim</span>(<span class="dv">0</span>, <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb43-33"><a href="#cb43-33" aria-hidden="true" tabindex="-1"></a>   <span class="fu">labs</span>(<span class="at">x=</span><span class="st">'mean expression'</span>, <span class="at">y=</span><span class="st">'log2 fold-change'</span>, <span class="at">title=</span>description) <span class="sc">+</span></span>
+<span id="cb43-34"><a href="#cb43-34" aria-hidden="true" tabindex="-1"></a>   <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb43-35"><a href="#cb43-35" aria-hidden="true" tabindex="-1"></a>   <span class="fu">theme</span>(<span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>), </span>
+<span id="cb43-36"><a href="#cb43-36" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">14</span>,  <span class="at">hjust =</span> .<span class="dv">5</span>)) </span>
+<span id="cb43-37"><a href="#cb43-37" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb43-38"><a href="#cb43-38" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add the plot to the plot list</span></span>
+<span id="cb43-39"><a href="#cb43-39" aria-hidden="true" tabindex="-1"></a>  plot_list[[<span class="fu">paste0</span>(<span class="st">"plot_"</span>, i, <span class="st">"_"</span>, GO_group)]] <span class="ot">&lt;-</span> p</span>
+<span id="cb43-40"><a href="#cb43-40" aria-hidden="true" tabindex="-1"></a>  }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Combine plots with Cowplot</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># make combiend plot with cowplot plot_grid</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>combined_plot <span class="ot">&lt;-</span> <span class="fu">plot_grid</span>(<span class="at">plotlist =</span> plot_list, <span class="at">ncol =</span> <span class="dv">2</span>, <span class="at">nrow =</span> <span class="dv">2</span>, </span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">label_size =</span> <span class="dv">12</span>)</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"./analysis_plots/GO_cc_4xCowplot.png"</span>, combined_plot,</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="dv">6</span>, <span class="at">dpi =</span> <span class="dv">300</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./analysis_plots/GO_cc_4xCowplot.png" class="img-fluid figure-img" style="width:90.0%"></p>
+<figcaption>Figure 8. MA plots with core enriched genes belonging to the indicated GO CC group shown in red.</figcaption>
+</figure>
+</div>
+<p>These data are really interesting! It looks like the gene clusters with increased expression in the anaerobic condition are largely cytosolic-ribosome-associated, either as nucleolar genes (upper left) or as cytosolic ribosome genes (upper right). In contrast, in anaerobic conditions mitochondrial envelope genes are strongly downregulated, which is exactly what you would expect.</p>
+<p>Finally, I thought it was interesting that cell wall type genes are enriched in the anaerobic condition, and show some of the largest significant fold-changes in the dataset. This is in fact one of the only enriched GO groups in the anaerobic condition that is not associated with ribosomal genes. Promoters of these genes could be good candidates for condition specific expression, as I will examine in the next section.</p>
+</section>
+<section id="analysis-part-5-identify-industrially-useful-conditional-promoters" class="level2">
+<h2 class="anchored" data-anchor-id="analysis-part-5-identify-industrially-useful-conditional-promoters">Analysis part 5 – Identify industrially useful conditional promoters</h2>
+<p>I will now identify genes that show negligible expression in the aerobic condition and substantially higher expression in the anaerobic condition.</p>
+<p><br><strong>Filter out genes that have not been called as DE</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check that the gene order in res and dds is the same</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">identical</span>(<span class="fu">rownames</span>(res), <span class="fu">rownames</span>(dds))) {</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>   <span class="fu">stop</span>(<span class="st">'dds and res rownames are not identical'</span>)}</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="co"># make a dds_df dataframe that holds normalized counts</span></span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>dds_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">counts</span>(dds, <span class="at">normalized=</span><span class="cn">TRUE</span>))</span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a><span class="co"># filter out non-significant genes</span></span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>dds_df<span class="sc">$</span>padj <span class="ot">&lt;-</span> res<span class="sc">$</span>padj</span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>dds_df <span class="ot">&lt;-</span> <span class="fu">filter</span>(dds_df, padj <span class="sc">&lt;</span> .<span class="dv">01</span>)</span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate means to simplify later filtering</span></span>
+<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a>dds_df <span class="ot">&lt;-</span> <span class="fu">mutate</span>(dds_df, </span>
+<span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a>                          <span class="at">aerobic_mean =</span> (aerobic_r1 <span class="sc">+</span> aerobic_r2) <span class="sc">/</span> <span class="dv">2</span>,</span>
+<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a>                          <span class="at">anaerobic_mean =</span> (anaerobic_r1 <span class="sc">+</span> anaerobic_r2) <span class="sc">/</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><br><strong>Create the plot</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter out genes based on desired counts</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>plot_df <span class="ot">&lt;-</span> <span class="fu">filter</span>(dds_df, aerobic_mean <span class="sc">&lt;</span> <span class="dv">150</span>, anaerobic_mean <span class="sc">&gt;</span> <span class="dv">500</span>)</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a><span class="co"># make a plotting df</span></span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>plot_df<span class="sc">$</span>gene <span class="ot">&lt;-</span> <span class="fu">rownames</span>(plot_df)</span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a><span class="co"># pivot longer to simplify plotting</span></span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>plot_df_long <span class="ot">&lt;-</span> <span class="fu">pivot_longer</span>(plot_df, </span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>                            <span class="at">cols =</span> <span class="fu">c</span>(<span class="st">'aerobic_r1'</span><span class="sc">:</span><span class="st">'anaerobic_r2'</span>), </span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>                            <span class="at">names_to =</span> <span class="st">'name'</span>, <span class="at">values_to =</span> <span class="st">'norm_counts'</span>)</span>
+<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a><span class="co"># add conditions without replicate numbers</span></span>
+<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a>plot_df_long <span class="ot">&lt;-</span> <span class="fu">mutate</span>(plot_df_long, <span class="at">condition =</span> <span class="fu">str_split</span>(name, <span class="st">'_'</span>, <span class="at">simplify=</span><span class="cn">TRUE</span>)[,<span class="dv">1</span>])</span>
+<span id="cb46-14"><a href="#cb46-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-15"><a href="#cb46-15" aria-hidden="true" tabindex="-1"></a><span class="co"># make the plot</span></span>
+<span id="cb46-16"><a href="#cb46-16" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(plot_df_long, <span class="fu">aes</span>(<span class="at">x=</span>gene, <span class="at">y=</span>norm_counts, <span class="at">color=</span>condition)) <span class="sc">+</span></span>
+<span id="cb46-17"><a href="#cb46-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb46-18"><a href="#cb46-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb46-19"><a href="#cb46-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust=</span><span class="dv">1</span>),</span>
+<span id="cb46-20"><a href="#cb46-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
+<span id="cb46-21"><a href="#cb46-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_break</span>(<span class="fu">c</span>(<span class="dv">2000</span>, <span class="dv">5900</span>)) <span class="sc">+</span></span>
+<span id="cb46-22"><a href="#cb46-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">500</span>, <span class="dv">1000</span>, <span class="dv">1500</span>, <span class="dv">2000</span>, <span class="dv">2500</span>, <span class="dv">6000</span>, <span class="dv">6500</span>),</span>
+<span id="cb46-23"><a href="#cb46-23" aria-hidden="true" tabindex="-1"></a>                     <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">6600</span>)) <span class="sc">+</span></span>
+<span id="cb46-24"><a href="#cb46-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span><span class="st">'normalized counts'</span>, <span class="at">x=</span><span class="st">''</span>) </span>
+<span id="cb46-25"><a href="#cb46-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-26"><a href="#cb46-26" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"./analysis_plots/anaerobic_up_conditional.png"</span>, p,</span>
+<span id="cb46-27"><a href="#cb46-27" aria-hidden="true" tabindex="-1"></a>       <span class="at">width =</span> <span class="dv">6</span>, <span class="at">height =</span> <span class="dv">4</span>, <span class="at">dpi =</span> <span class="dv">300</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./analysis_plots/anaerobic_up_conditional.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<figcaption>Figure 9. Genes with very low expression in the aerobic condition and far higher expression in the anaerobic condition.</figcaption>
+</figure>
+</div>
+<p>Very nice. Looks like there is a nice set of genes with low expression during aerobic growth and a range of expression levels in anaerobic growth. YAR073W (IMD1) is the most interesting for very low expression in aerobic growth and moderate expression in anaerobic conditions. It’s interesting that the annotation of this gene in SGD is “non-functional protein…not expressed at detectable levels”. Clearly it is expressed at detectable levels in the anaerobic condition used in this experiment – I wonder if it also has some function in this context.</p>
+<p>Also interesting is YBR085W (AAC3), a mitochondrial inner membrane ADP/ATP transporter known to be expressed in anaerobic conditions. Finally, YOL159C (CSS3) is impressive for the extent to which it is up-regulated during anaerobic growth. As per SGD this gene does not have a known function.</p>
+<p>Overall, these data are quite useful as they suggest that the promoters of these genes may be useful for driving the expression of transgenes specifically in anaerobic growth environments. It is worth noting though that if the DESeq normalization erroneously increased the expression level of many anaerobically expressed genes, the absolute levels of gene expression and fold-changes of the genes in Figure 9 will also change. Specifically, each of these genes would be expressed at a higher absolute level in the aerobic condition and a lower absolute level in the anaerobic condition. Thus, it may be a good idea to use quantitative qPCR to validate these fold-changes prior to using the promoters for metabolic engineering.</p>
+<div class="cell">
+<style type="text/css">
+figcaption {
+  color: #666666 !important;
+  font-size: 11pt !important;
+  text-align: center !important;
+}
+
+
+</style>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

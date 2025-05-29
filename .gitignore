@@ -1,5 +1,12 @@
 *.gz
 *.fna
-.*
+*.DS_Store
 */fq
 *.zip
+.Rproj.user
+.RData
+.Rhistory
+*.bin
+*.log
+*.json
+*.js

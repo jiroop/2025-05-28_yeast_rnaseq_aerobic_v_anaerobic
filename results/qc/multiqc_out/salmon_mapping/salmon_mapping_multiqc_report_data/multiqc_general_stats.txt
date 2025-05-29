@@ -1,9 +1,0 @@
-Sample	salmon-percent_mapped	salmon-num_mapped	salmon-library_types	salmon-compatible_fragment_ratio	salmon-strand_mapping_bias
-results | salmon_mapping | aerobic_r1 | aerobic_r1				100.0	8.188894759763175e-05
-results | salmon_mapping | aerobic_r1 | aux_info | aerobic_r1	85.00797223798216	6.223993	ISR		
-results | salmon_mapping | aerobic_r2 | aerobic_r2				100.0	7.86458676222792e-05
-results | salmon_mapping | aerobic_r2 | aux_info | aerobic_r2	84.94349436377739	6.219272999999999	ISR		
-results | salmon_mapping | anaerobic_r1 | anaerobic_r1				100.0	0.000262117082623147
-results | salmon_mapping | anaerobic_r1 | aux_info | anaerobic_r1	84.17201687511059	5.128	ISR		
-results | salmon_mapping | anaerobic_r2 | anaerobic_r2				100.0	0.00025285181048320855
-results | salmon_mapping | anaerobic_r2 | aux_info | anaerobic_r2	84.10690435299585	5.124034	ISR		
