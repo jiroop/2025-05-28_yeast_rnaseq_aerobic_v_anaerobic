@@ -151,7 +151,7 @@ window.Quarto = {
 <p><br> <img src="./qc/multiqc_out/fastqc/general_stats_table.png" class="img-fluid quarto-figure quarto-figure-center" style="width:100.0%" alt="Figure 1. MultiQC report on basic fastq read statistics"></p>
 <p>In Figure 1 we see that the fastq data includes 4 set of paired end reads, corresponding to the two biological replicates assayed in both aerobic and anaerobic conditions. Between 6.1e6 and 7.3e6 reads are present in each file. 61% - 67% of the reads are duplicates, which seems high but is fairly normal from what I’ve observed for RNA-seq in yeast where transcripts tend to be relatively short and some genes are expressed at very high levels.</p>
 <p>Next, we assess per base sequence quality for a representative fastq file.</p>
-<p><br> <img src="./qc/fastqc_out/aerobic_r1_1_fastqc_base_quality.png" class="img-fluid quarto-figure quarto-figure-'center'" style="width:80.0%" alt="“Figure 2. FastQC per-base quality summary for aerobic_r1_1"></p>
+<p><br> <img src="./qc/fastqc_out/aerobic_r1_1_fastqc_base_quality.png" class="img-fluid quarto-figure quarto-figure-center" style="width:80.0%" alt="“Figure 2. FastQC per-base quality summary for aerobic_r1_1"></p>
 <p>Figure 2 shows that the per base read quality is sufficiently high across the length of read, and so no trimming was performed. Additionally, &lt;2% adapter sequences were identified in any of the fastq files (not shown), and so no removal of adapter sequences was necessary prior to mapping.</p>
 <p>After read mapping, the quality of the mappings was assessed using MultiQC. These data show that 82% - 84% of the reads mapped to the reference genome.</p>
 </section>
