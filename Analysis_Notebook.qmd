@@ -35,7 +35,7 @@ In Figure 1 we see that the fastq data includes 4 set of paired end reads, corre
 
 Next, we assess per base sequence quality for a representative fastq file.
 
-<br> !["Figure 2. FastQC per-base quality summary for aerobic_r1_1](./qc/fastqc_out/aerobic_r1_1_fastqc_base_quality.png){fig-align="'center'" width="80%"}
+<br> !["Figure 2. FastQC per-base quality summary for aerobic_r1_1](./qc/fastqc_out/aerobic_r1_1_fastqc_base_quality.png){fig-align="center" width="80%"}
 
 Figure 2 shows that the per base read quality is sufficiently high across the length of read, and so no trimming was performed. Additionally, \<2% adapter sequences were identified in any of the fastq files (not shown), and so no removal of adapter sequences was necessary prior to mapping.
 
