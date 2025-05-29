@@ -104,10 +104,23 @@ window.Quarto = {
 
 </head>
 
-<body class="fullcontent quarto-light">
+<body class="quarto-light">
 
 <div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
-
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of Contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#read-quality-control-and-mapping" id="toc-read-quality-control-and-mapping" class="nav-link" data-scroll-target="#read-quality-control-and-mapping">1. Read quality control and mapping</a></li>
+  <li><a href="#import-mapped-reads-into-r-using-tximport" id="toc-import-mapped-reads-into-r-using-tximport" class="nav-link" data-scroll-target="#import-mapped-reads-into-r-using-tximport">2. Import mapped reads into R using Tximport</a></li>
+  <li><a href="#identify-de-genes-with-deseq2" id="toc-identify-de-genes-with-deseq2" class="nav-link" data-scroll-target="#identify-de-genes-with-deseq2">3. Identify DE genes with DESeq2</a></li>
+  <li><a href="#assess-functional-enrichment-of-de-genes" id="toc-assess-functional-enrichment-of-de-genes" class="nav-link" data-scroll-target="#assess-functional-enrichment-of-de-genes">4. Assess functional enrichment of DE genes</a></li>
+  <li><a href="#identify-industrially-useful-conditional-promoters" id="toc-identify-industrially-useful-conditional-promoters" class="nav-link" data-scroll-target="#identify-industrially-useful-conditional-promoters">5. Identify industrially useful conditional promoters</a></li>
+  </ul>
+</nav>
+</div>
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
@@ -139,8 +152,8 @@ window.Quarto = {
 <p>As mentioned above, this notebook represents only a part of the analysis performed in this project. The first half of the analysis (read quality control and pseudo alignment) is performed by command line tools that are called by the bash script, RNASeqpipeline.sh, that is located in the scripts directory. Part 1 of this document provides a brief summary of this phase, but does not detail the specific commands. The second half of the analysis project is coded in R, and is contained within this document. Thus, Parts 2 through 5 of this document describe the analysis of assigned RNA-seq reads. The goal of this stage of analysis is to address the two specific goals mentioned above. Note that the R_analysis_notebook.qmd version of this document contained in the scripts directory is called by RNASeqpipeline.sh. Thus, by running RNASeqpipeline.sh all steps in the analysis of these reads is executed, including running of the R code described here, and generation of the R_analysis_notebook.html file.</p>
 <p>A note about the RNA-seq reads used as data in this analysis. These reads were downloaded from <a href="https://figshare.com/articles/dataset/Yeast_RNA-seq_data_and_transcriptome_for_kallisto-sleuth_demo_session/24182520">this figshare project</a>. Unfortunately, the details of the experiment that produced these data are unknown: Neither the strain nor the growth conditions (aside from anaerobic or aerobic) are described. As such, the conclusions drawn from this analysis should be treated as preliminary.</p>
 </section>
-<section id="part-1-read-quality-control-and-mapping" class="level2">
-<h2 class="anchored" data-anchor-id="part-1-read-quality-control-and-mapping">Part 1 — Read quality control and mapping</h2>
+<section id="read-quality-control-and-mapping" class="level2">
+<h2 class="anchored" data-anchor-id="read-quality-control-and-mapping">1. Read quality control and mapping</h2>
 <p>The first steps of the analysis utilized command-line tools that were executed via a bash script associated with the project: RNASeqpipeline.sh. Details of these steps can be seen by looking at the script. The workflow performed by command-line tools is summarized below:</p>
 <ul>
 <li>Downloading reads in fastq format from the <a href="https://figshare.com/articles/dataset/Yeast_RNA-seq_data_and_transcriptome_for_kallisto-sleuth_demo_session/24182520">figshare project</a></li>
@@ -155,8 +168,8 @@ window.Quarto = {
 <p>Figure 2 shows that the per base read quality is sufficiently high across the length of read, and so no trimming was performed. Additionally, &lt;2% adapter sequences were identified in any of the fastq files (not shown), and so no removal of adapter sequences was necessary prior to mapping.</p>
 <p>After read mapping, the quality of the mappings was assessed using MultiQC. These data show that 82% - 84% of the reads mapped to the reference genome.</p>
 </section>
-<section id="part-2-import-mapped-reads-into-r-using-tximport" class="level2">
-<h2 class="anchored" data-anchor-id="part-2-import-mapped-reads-into-r-using-tximport">Part 2 — Import mapped reads into R using Tximport</h2>
+<section id="import-mapped-reads-into-r-using-tximport" class="level2">
+<h2 class="anchored" data-anchor-id="import-mapped-reads-into-r-using-tximport">2. Import mapped reads into R using Tximport</h2>
 <p><br><strong>Load necessary libraries</strong></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
@@ -361,8 +374,8 @@ window.Quarto = {
 </div>
 <p><br>The MA plots makes this situation very clear. There is clearly a cluster of very highly expressed genes that are at higher levels in the anaerobic sample, but the majority of the rest of the genes in this sample make up a smaller proportion of the transcriptome than in the aerobic sample. I will proceed through normalization with caution keeping in mind that there are at least two biological scenarios that would lead to TPMs/counts data that looks like this.</p>
 </section>
-<section id="analysis-part-3-identify-de-genes-with-deseq2" class="level2">
-<h2 class="anchored" data-anchor-id="analysis-part-3-identify-de-genes-with-deseq2">Analysis part 3 – Identify DE genes with DESeq2</h2>
+<section id="identify-de-genes-with-deseq2" class="level2">
+<h2 class="anchored" data-anchor-id="identify-de-genes-with-deseq2">3. Identify DE genes with DESeq2</h2>
 <p>DESeq calculates on mapped counts, not TPMs. It also requires that the colnames of the txi$counts matrix match the rownames of the study_design data frame. We will change the column and row names accordingly, then load the counts data into a DESeq object (dds). Next, we will filter out genes with less than 10 counts across all samples so as to lessen the multiple testing burden when differential expression is calculated.</p>
 <p><br><strong>Import read counts into dds (DESeq2 object) and filter low-expression genes.</strong></p>
 <div class="cell">
@@ -625,8 +638,8 @@ Normalization factors are a 5783 by 4 matrix</code></pre>
 <p><br> This looks about as expected. Median of ratios normalization shifted the distributions of reads per gene such that a similar number of genes are up- and down-regulated in each condition. This is DESeq forcing the data to fit its assumed model that gene expression changes are roughly symmetrical, with a similar number of genes being up and down-regulated in a given condition. This <em>may</em> reflect the biological reality of these samples, but i am skeptical. I learn more towards a model in which for cells grown in the anaerobic condition, a small set of genes increases in expression slightly (or not at all), but most of the genes are down-regulated.</p>
 <p>Regardless, I will proceed to assessing functional enrichment of the so called up- and down-regulated genes. I am curious which functional groups of genes are expressed at higher levels in the anaerobic sample, and which are strongly down-regulated. I am also curious if there is any functional similarity among the cluster of genes that are very highly expressed (1k - 10k average reads) and appear to be up-regulated in the anaerobic condition.</p>
 </section>
-<section id="analysis-part-4-assess-functional-enrichment-of-de-genes" class="level2">
-<h2 class="anchored" data-anchor-id="analysis-part-4-assess-functional-enrichment-of-de-genes">Analysis part 4 – Assess functional enrichment of DE genes</h2>
+<section id="assess-functional-enrichment-of-de-genes" class="level2">
+<h2 class="anchored" data-anchor-id="assess-functional-enrichment-of-de-genes">4. Assess functional enrichment of DE genes</h2>
 <p>I want to get a general sense for the functional enrichment of genes that are called as differentially expressed in the DESeq analysis. To do this, I will use GSEA from the clusterProfiler package to identify functional enrichment among differentially expressed genes. The first step in GSEA is to create a list of all genes that is ranked by the log2 fold change, highest to lowest.</p>
 <p><br><strong>Create a list of all genes sorted by log2 fold change between conditions</strong></p>
 <div class="cell">
@@ -1052,8 +1065,8 @@ Normalization factors are a 5783 by 4 matrix</code></pre>
 <p>These data are really interesting! It looks like the gene clusters with increased expression in the anaerobic condition are largely cytosolic-ribosome-associated, either as nucleolar genes (upper left) or as cytosolic ribosome genes (upper right). In contrast, in anaerobic conditions mitochondrial envelope genes are strongly downregulated, which is exactly what you would expect.</p>
 <p>Finally, I thought it was interesting that cell wall type genes are enriched in the anaerobic condition, and show some of the largest significant fold-changes in the dataset. This is in fact one of the only enriched GO groups in the anaerobic condition that is not associated with ribosomal genes. Promoters of these genes could be good candidates for condition specific expression, as I will examine in the next section.</p>
 </section>
-<section id="analysis-part-5-identify-industrially-useful-conditional-promoters" class="level2">
-<h2 class="anchored" data-anchor-id="analysis-part-5-identify-industrially-useful-conditional-promoters">Analysis part 5 – Identify industrially useful conditional promoters</h2>
+<section id="identify-industrially-useful-conditional-promoters" class="level2">
+<h2 class="anchored" data-anchor-id="identify-industrially-useful-conditional-promoters">5. Identify industrially useful conditional promoters</h2>
 <p>I will now identify genes that show negligible expression in the aerobic condition and substantially higher expression in the anaerobic condition.</p>
 <p><br><strong>Filter out genes that have not been called as DE</strong></p>
 <div class="cell">
