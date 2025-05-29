@@ -1,6 +1,6 @@
-##Yeast RNA-seq Analysis: Aerobic vs Anaerobic Growth Conditions
+## Yeast RNA-seq Analysis: Aerobic vs Anaerobic Growth Conditions
 
-This project analyzes RNA-seq data comparing yeast growth under aerobic and anaerobic conditions using a comprehensive bioinformatics pipeline. The entire analysis pipeline can be run by execution of the bash script ./scripts/pipeline.sh.
+This project analyzes RNA-seq data comparing yeast growth under aerobic and anaerobic conditions using a comprehensive bioinformatics pipeline. The entire analysis pipeline can be run by execution of the bash script ./scripts/pipeline.sh. An analysis notebook describing all steps in the pipeline, the R code used, and a discussion of the analysis done is found in Analysis_Notebook. An html viewable page is [here](https://raw.githack.com/jiroop/2025-05-28_yeast_rnaseq_aerobic_v_anaerobic/main/Analysis_Notebook.html).
 
 Project Overview
 The pipeline performs differential gene expression analysis between yeast grown in aerobic versus anaerobic conditions, including:
@@ -10,7 +10,7 @@ Read mapping and quantification
 Differential expression analysis
 Data visualization and interpretation
 
-###Pipeline Workflow
+### Pipeline Workflow
 
 1. Data Download: Downloads sequencing reads and yeast transcriptome reference
 2. Quality Control: FastQC analysis of raw reads
@@ -21,19 +21,21 @@ Data visualization and interpretation
 
 
 
-###Installation
+### Installation
 
 1. Clone this repository
 
-cd 250518_yeast_anaerobic_v_aerobic_expression
+2. cd 250518_yeast_anaerobic_v_aerobic_expression
 
-Create and activate the conda environment:
+3. Create and activate the conda environment:
 
-conda env create -f environment.yml
-conda activate 250518_RNA-seq_yeast_anaerobic_v_aerobic
+4. conda env create -f environment.yml
 
-Usage
+5. conda activate 250518_RNA-seq_yeast_anaerobic_v_aerobic
+
+### Usage
+
 Run the complete pipeline:
 ./scripts/pipeline.sh
 
-All steps in the pipeline and analysis are described in Analysis_Notebook.html
+All steps in the pipeline and analysis are described in ./Analysis_Notebook.html (html viewable page [here](https://raw.githack.com/jiroop/2025-05-28_yeast_rnaseq_aerobic_v_anaerobic/main/Analysis_Notebook.html))
