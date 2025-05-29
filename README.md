@@ -1,6 +1,6 @@
 ## Yeast RNA-seq Analysis: Aerobic vs Anaerobic Growth Conditions
 
-This project analyzes RNA-seq data comparing yeast growth under aerobic and anaerobic conditions using a comprehensive bioinformatics pipeline. The entire analysis pipeline can be run by execution of the bash script ./scripts/pipeline.sh. An analysis notebook describing all steps in the pipeline, the R code used, and a discussion of the analysis done is found in Analysis_Notebook. An html viewable page is [here](https://raw.githack.com/jiroop/2025-05-28_yeast_rnaseq_aerobic_v_anaerobic/main/Analysis_Notebook.html).
+This project analyzes RNA-seq data comparing yeast growth under aerobic and anaerobic conditions using a comprehensive bioinformatics pipeline. The entire analysis pipeline can be run by execution of the bash script ./scripts/pipeline.sh. An analysis notebook describing all steps in the pipeline, the R code used, and a discussion of the analysis done is found in Analysis_Notebook. An html viewable page is [here](https://jiroop.github.io/2025-05-28_yeast_rnaseq_aerobic_v_anaerobic/Analysis_Notebook.html).
 
 Project Overview
 The pipeline performs differential gene expression analysis between yeast grown in aerobic versus anaerobic conditions, including:
@@ -38,4 +38,4 @@ Data visualization and interpretation
 Run the complete pipeline:
 ./scripts/pipeline.sh
 
-All steps in the pipeline and analysis are described in ./Analysis_Notebook.html (html viewable page [here](https://raw.githack.com/jiroop/2025-05-28_yeast_rnaseq_aerobic_v_anaerobic/main/Analysis_Notebook.html))
+All steps in the pipeline and analysis are described in ./Analysis_Notebook.html (html viewable page [here](https://jiroop.github.io/2025-05-28_yeast_rnaseq_aerobic_v_anaerobic/Analysis_Notebook.html))
