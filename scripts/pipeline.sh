@@ -10,9 +10,9 @@ mkdir -p mapped_reads_salmon analysis_plots scripts qc/{fastqc_out,multiqc_out/{
 
 ## STEP1 Download fastq files
 
-# wget -P ./data/fastq_raw https://figshare.com/ndownloader/articles/24182520/versions/2
-# unzip ./data/fastq_raw/2 -d ./data/fastq_raw/ && rm ./data/fastq_raw/2
-# rm ./data/fastq_raw/GCF_000146045.2_R64_rna.fna.gz 
+ wget -P ./data/fastq_raw https://figshare.com/ndownloader/articles/24182520/versions/2
+ unzip ./data/fastq_raw/2 -d ./data/fastq_raw/ && rm ./data/fastq_raw/2
+ rm ./data/fastq_raw/GCF_000146045.2_R64_rna.fna.gz 
 
 
 ## STEP2 Run fastqc and MultiQC
